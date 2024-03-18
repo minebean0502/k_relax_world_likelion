@@ -7,9 +7,9 @@ For further reference, please consider the following sections:
 * [Spring Boot Gradle Plugin Reference Guide](https://docs.spring.io/spring-boot/docs/3.2.3/gradle-plugin/reference/html/)
 * [Create an OCI image](https://docs.spring.io/spring-boot/docs/3.2.3/gradle-plugin/reference/html/#build-image)
 * [Spring Web](https://docs.spring.io/spring-boot/docs/3.2.3/reference/htmlsingle/index.html#web)
-* [OAuth2 Client](https://docs.spring.io/spring-boot/docs/3.2.3/reference/htmlsingle/index.html#web.security.oauth2.client)
 * [Spring Data JPA](https://docs.spring.io/spring-boot/docs/3.2.3/reference/htmlsingle/index.html#data.sql.jpa-and-spring-data)
 * [Validation](https://docs.spring.io/spring-boot/docs/3.2.3/reference/htmlsingle/index.html#io.validation)
+* [OAuth2 Client](https://docs.spring.io/spring-boot/docs/3.2.3/reference/htmlsingle/index.html#web.security.oauth2.client)
 
 ### Guides
 The following guides illustrate how to use some features concretely:
