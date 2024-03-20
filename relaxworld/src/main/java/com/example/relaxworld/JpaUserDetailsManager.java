@@ -78,7 +78,7 @@ public class JpaUserDetailsManager implements UserDetailsManager {
         User newUser = User.builder()
                 .username(userDetails.getUsername())
                 .userId(userDetails.getUserId())
-                .password(passwordEncoder.encode(userDetails.getPassword()))
+                .password(userDetails.getPassword())
                 .phoneNumber(userDetails.getPhoneNumber())
                 .userRole("ROLE_REGISTER")
                 .build();
@@ -88,11 +88,17 @@ public class JpaUserDetailsManager implements UserDetailsManager {
 
 
     public JwtResponseDto login(JwtRequestDto dto) {
+        System.out.println("로그인 메서드 시작");
         User userEntity = userRepository.findByUserId(dto.getUserId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
+        System.out.println("id에 대한 사용자는 찾음 %s".formatted(userEntity.getUserId()));
 
-        if (!passwordEncoder.matches(dto.getPassword(), userEntity.getPassword()))
+        if (!passwordEncoder.matches(dto.getPassword(), userEntity.getPassword())) {
+            System.out.println("비밀번호 불일치 ");
+            System.out.println("dto password %s".formatted(passwordEncoder.encode(dto.getPassword())));
+            System.out.println("user entity password %s".formatted(passwordEncoder.encode(userEntity.getPassword())));
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
 
         // jwt 발급
         String jwt = jwtTokenUtils.generateToken(CustomUserDetails.fromEntity(userEntity));
