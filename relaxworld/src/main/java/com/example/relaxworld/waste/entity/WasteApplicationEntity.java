@@ -19,7 +19,7 @@ public class WasteApplicationEntity {
     private WasteEntity waste;  // @ManyToOne
     @ManyToOne
     // @JoinColumn(name = "wasteId", referencedColumnName = "id")
-    private FormEntity form;    // @ManyToOne
+    private FormEntity form2;    // @ManyToOne
 
     private int quantity;       // 수량
 }

@@ -1,7 +1,10 @@
 package com.example.relaxworld.waste.dto;
 
 import com.example.relaxworld.waste.entity.FormEntity;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 

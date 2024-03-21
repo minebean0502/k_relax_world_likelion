@@ -1,4 +1,4 @@
-package com.example.relaxworld.user.entity;
+package com.example.relaxworld.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -6,12 +6,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
 
-@Builder
 @Getter
+@Builder
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-public class UserEntity {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,6 +24,6 @@ public class UserEntity {
     @Setter
     private String phoneNumber;
     @Setter
-    private String UserRole = "ROLE_REGISTER";
-    // 수정사항일까요
+    private String userRole;
+
 }
