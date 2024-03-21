@@ -25,4 +25,5 @@ public class UserEntity {
     private String phoneNumber;
     @Setter
     private String UserRole = "ROLE_REGISTER";
+    // 수정사항일까요
 }
