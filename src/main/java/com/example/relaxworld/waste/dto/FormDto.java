@@ -1,6 +1,5 @@
 package com.example.relaxworld.waste.dto;
 
-import com.example.relaxworld.entity.User;
 import com.example.relaxworld.waste.entity.FormEntity;
 import lombok.*;
 

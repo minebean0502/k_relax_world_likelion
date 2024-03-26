@@ -28,17 +28,17 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/waste/apply",
-                                "/waste/apply/add-waste-item",
-                                "/waste/apply/finalize"
-                        )
-                        .hasRole("REGISTER")
-
-                        .requestMatchers(
                                 "/v1/user/login",
-                                "/v1/user/signup"
+                                "/v1/user/signup",
+                                "/v1/user/idpw/modify",
+                                "/v1/user/idpw/id/find",
+                                "/v1/user/idpw/pw/find"
                         )
                         .anonymous()
+                        .requestMatchers(
+                                "waste/**"
+                        )
+                        .authenticated()
                 )
 
                 .sessionManagement(session -> session

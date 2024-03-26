@@ -1,6 +1,6 @@
-package com.example.relaxworld.dto;
+package com.example.relaxworld.user.dto;
 
-import com.example.relaxworld.entity.User;
+import com.example.relaxworld.user.entity.User;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

@@ -1,15 +1,14 @@
-package com.example.relaxworld;
+package com.example.relaxworld.user.service;
 
-import com.example.relaxworld.dto.CustomUserDetails;
-import com.example.relaxworld.dto.JwtRequestDto;
-import com.example.relaxworld.dto.JwtResponseDto;
-import com.example.relaxworld.entity.User;
+import com.example.relaxworld.user.dto.CustomUserDetails;
+import com.example.relaxworld.jwt.dto.JwtRequestDto;
+import com.example.relaxworld.jwt.dto.JwtResponseDto;
+import com.example.relaxworld.user.entity.ModifyPasswordRequest;
+import com.example.relaxworld.user.entity.User;
 import com.example.relaxworld.jwt.JwtTokenUtils;
-import com.example.relaxworld.repo.UserRepository;
+import com.example.relaxworld.user.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,7 +16,6 @@ import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -44,6 +42,7 @@ public class JpaUserDetailsManager implements UserDetailsManager {
                     .username("admin")
                     .userId("admin")
                     .password(passwordEncoder.encode("admin"))
+                    .phoneNumber("admin")
                     .userRole("ADMIN") // TODO 추후 관리자 role 어떻게 할 지 상의할것 우선 register로 설정
                     .build());
         }
@@ -57,24 +56,13 @@ public class JpaUserDetailsManager implements UserDetailsManager {
                 = userRepository.findByUsername(username);
         if (optionalUser.isEmpty())
             throw new UsernameNotFoundException(username);
-        User userEntity = optionalUser.get();
-        // 권한 이름에서 "ROLE_" 접두사 제거
-        List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList(userEntity.getUserRole().replace("ROLE_", ""));
 
-        return new org.springframework.security.core.userdetails.User(
-                userEntity.getUsername(),
-                userEntity.getPassword(),
-                authorities);
-
-        /* 0326 ROLE 문제 생겨서 일단 바꿈
         User userEntity = optionalUser.get();
         return org.springframework.security.core.userdetails.User.builder()
                 .username(userEntity.getUsername())
                 .password(userEntity.getPassword())
-                .roles(userEntity.getUserRole().replace("ROLE_", ""))
+                .roles(userEntity.getUserRole())
                 .build();
-
-         */
     }
 
     @Override
@@ -94,7 +82,7 @@ public class JpaUserDetailsManager implements UserDetailsManager {
                 .userId(userDetails.getUserId())
                 .password(userDetails.getPassword())
                 .phoneNumber(userDetails.getPhoneNumber())
-                .userRole("REGISTER")
+                .userRole("ROLE_REGISTER")
                 .build();
 
         userRepository.save(newUser);
@@ -102,15 +90,10 @@ public class JpaUserDetailsManager implements UserDetailsManager {
 
 
     public JwtResponseDto login(JwtRequestDto dto) {
-        System.out.println("로그인 메서드 시작");
         User userEntity = userRepository.findByUserId(dto.getUserId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
-        System.out.println("id에 대한 사용자는 찾음 %s".formatted(userEntity.getUserId()));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
 
         if (!passwordEncoder.matches(dto.getPassword(), userEntity.getPassword())) {
-            System.out.println("비밀번호 불일치 ");
-            System.out.println("dto password %s".formatted(passwordEncoder.encode(dto.getPassword())));
-            System.out.println("user entity password %s".formatted(passwordEncoder.encode(userEntity.getPassword())));
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
 
@@ -119,6 +102,50 @@ public class JpaUserDetailsManager implements UserDetailsManager {
         JwtResponseDto response = new JwtResponseDto();
         response.setToken(jwt);
         return response;
+    }
+
+    // id 찾기
+    public String idFind(String phoneNumber) {
+        // phoneNumber를 가진 user 찾기
+        User userEntity = userRepository.findByPhoneNumber(phoneNumber);
+
+        // user가 null이면 해당 번호와 일치하는 회원이 없다는 의미
+        if (userEntity == null) {
+            return "해당 번호와 일치하는 회원이 없습니다.";
+        }
+        return "아이디: " + userEntity.getUserId();
+    }
+
+
+    // pw 찾기
+    public String pwFind(String userId, String phoneNumber) {
+        // userId로 회원 찾기
+        User userEntity = userRepository.findByUserId(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
+
+        if(!userEntity.getPhoneNumber().equals(phoneNumber)){
+            return "해당 id와 phone number와 일치하지 않습니다.";
+        }
+        System.out.println("비밀번호: " + userEntity.getPassword());
+        return "비밀번호를 재설정해주세요";
+    }
+
+    // 입력한 userId랑 회원가입때 입력한 폰 넘버랑 다르면 비밀번호 수정 실패
+    public String updatePassword(ModifyPasswordRequest request){
+        // login 아이디로 일치하는 회원이 있는지 찾기
+        User userEntity = userRepository.findByUserId(request.getUserId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
+
+        // 회원가입 때 입력한 핸드폰 번호와 비밀번호 수정을 위해 입력한폰 핸드폰 번호가 일치하지 않으면 bad request
+        if (!userEntity.getPhoneNumber().equals(request.getPhoneNumber())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Phone number does not match.");
+        }
+
+        // userid, phonenumber 모두 일치하면 비밀번호 수정
+        userEntity.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(userEntity);
+
+        return "비밀번호 수정 완료";
     }
 
     @Override

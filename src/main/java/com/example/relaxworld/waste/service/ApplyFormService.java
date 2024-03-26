@@ -1,7 +1,7 @@
 package com.example.relaxworld.waste.service;
 
-import com.example.relaxworld.entity.User;
-import com.example.relaxworld.repo.UserRepository;
+import com.example.relaxworld.user.entity.User;
+import com.example.relaxworld.user.repository.UserRepository;
 import com.example.relaxworld.waste.dto.*;
 import com.example.relaxworld.waste.entity.FormEntity;
 import com.example.relaxworld.waste.entity.WasteApplicationEntity;
@@ -11,13 +11,7 @@ import com.example.relaxworld.waste.repository.WasteApplicationRepository;
 import com.example.relaxworld.waste.repository.WasteRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
-
-import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service

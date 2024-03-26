@@ -1,4 +1,4 @@
-package com.example.relaxworld.dto;
+package com.example.relaxworld.jwt.dto;
 
 import lombok.Data;
 

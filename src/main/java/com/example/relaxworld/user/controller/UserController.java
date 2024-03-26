@@ -1,8 +1,10 @@
-package com.example.relaxworld;
+package com.example.relaxworld.user.controller;
 
-import com.example.relaxworld.dto.CustomUserDetails;
-import com.example.relaxworld.dto.JwtRequestDto;
-import com.example.relaxworld.dto.JwtResponseDto;
+import com.example.relaxworld.user.service.JpaUserDetailsManager;
+import com.example.relaxworld.user.dto.CustomUserDetails;
+import com.example.relaxworld.jwt.dto.JwtRequestDto;
+import com.example.relaxworld.jwt.dto.JwtResponseDto;
+import com.example.relaxworld.user.entity.ModifyPasswordRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -47,12 +49,41 @@ public class UserController {
                     .password(passwordEncoder.encode(password))
                     .phoneNumber(phoneNumber)
                     .build());
-        // 회원가입 성공 후 로그인 페이지로 이동
-        return "회원가입 성공";
+            // 회원가입 성공 후 로그인 페이지로 이동
+            return "회원가입 성공";
         }
         else{
             // 비밀번호 불일치
             return "비밀번호 불일치";
         }
+    }
+
+    // id찾기 페이지 /v1/user/idpw/id/find
+    @GetMapping("idpw/id/find")
+    public String idFind(
+            @RequestParam("phone_number")
+            String phoneNumber
+    ) {
+        return manager.idFind(phoneNumber);
+    }
+
+    // pw찾기 페이지 /v1/user/idpw/pw/find
+    @GetMapping("idpw/pw/find")
+    public String pwFind(
+            @RequestParam("userId")
+            String userId,
+            @RequestParam("phone_number")
+            String phoneNumber
+    ) {
+        return manager.pwFind(userId, phoneNumber);
+    }
+
+    // (임시)비밀번호 수정 /v1/user/idpw/modify
+    @PostMapping("idpw/modify")
+    public String idpwModify(
+            @RequestBody
+            ModifyPasswordRequest request
+    ) {
+        return manager.updatePassword(request);
     }
 }

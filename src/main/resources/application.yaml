@@ -12,13 +12,15 @@ spring:
 # 커스텀 설정(Spring 내부 설정 아님)
 jwt:
   secret: aaaabbbsdifqbvaesoioegwaaaabbbsdifqbvaesoioegwaaaabbbsdifqbvaes
-
-logging:
-  level:
-    org:
-      springframework:
-        security: DEBUG
-    com:
-      example:
-        relaxworld:
-          jwt: DEBUG
+  #        show_sql: true
+  #  h2:
+  #    console:
+  #      enabled: true
+  #      path: /h2-console
+  thymeleaf:
+    prefix: classpath:templates/
+    check-template-location: true
+    suffix: .html
+    mode: HTML5
+    cache: false
+    template-resolver-order: 0

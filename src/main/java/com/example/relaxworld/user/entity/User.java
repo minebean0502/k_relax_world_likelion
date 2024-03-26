@@ -1,4 +1,4 @@
-package com.example.relaxworld.entity;
+package com.example.relaxworld.user.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -8,7 +8,6 @@ import lombok.*;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "user")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,4 +22,16 @@ public class User {
     private String phoneNumber;
     @Setter
     private String userRole;
+
+    /*
+    @Setter
+    private String UserRole = "ROLE_REGISTER";
+    @Builder
+    public User(String username, String userId,String password, String phoneNumber) {
+        this.username = username;
+        this.userId=userId;
+        //this.password = password;
+        this.phoneNumber= phoneNumber;
+    }
+     */
 }

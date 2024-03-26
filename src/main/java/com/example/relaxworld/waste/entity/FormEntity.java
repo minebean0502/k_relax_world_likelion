@@ -1,6 +1,6 @@
 package com.example.relaxworld.waste.entity;
 
-import com.example.relaxworld.entity.User;
+import com.example.relaxworld.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
