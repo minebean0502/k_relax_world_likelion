@@ -18,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.AccessDeniedException;
+import java.rmi.AccessException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -139,6 +141,24 @@ public class ApplyFormService {
         return FormDto.fromEntity(formEntity);
     }
 
+    public void cancelApplication(Long formId) throws AccessDeniedException {
+        User currentUser = facade.extractUser();
+
+        // 현재 사용자가 작성중인 form 정보 찾기
+        FormEntity form = formRepository.findById(formId)
+                .orElseThrow(() -> new EntityNotFoundException("해당하는 신청서가 존재하지 않습니다: " + formId));
+
+        // 폼을 삭제하려는 User가 form을 작성한 유저가 아닐 경우
+        if (!form.getUser().equals(currentUser)) {
+            throw new AccessDeniedException("이 신청서를 삭제할 권한이 없습니다.");
+        } else {
+            // user는 권한이 있으므로 wasteApplication(장바구니)와
+            List<WasteApplicationEntity> wasteApplication = wasteApplicationRepository.findByFormId(formId);
+            wasteApplicationRepository.deleteAll(wasteApplication);
+            // 해당 폼을 삭제한다.
+            formRepository.delete(form);
+        }
+    }
 
 
 

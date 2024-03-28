@@ -7,6 +7,7 @@ import com.example.relaxworld.waste.dto.WasteItemDto;
 import com.example.relaxworld.waste.service.ApplyFormService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,12 +53,28 @@ public class ApplyFormController {
         return ResponseEntity.ok(formDto);
     }
 
+    // 만약 최종 이후 수정, 취소가 필요하다면
+    @DeleteMapping("/apply/finalize/cancel")
+    public ResponseEntity<?> cancelApplication(
+            @RequestParam("formId")
+            Long formId
+    ) {
+        try {
+            applyFormService.cancelApplication(formId);
+            return ResponseEntity.ok("신청이 취소되었습니다");
+        } catch (Exception e) {
+            log.error("신청 취소 중 오류가 발생했습니다: ", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("신청 취소에 실패했습니다.");
+        }
+    }
+
+    // ------------------------------------------- //
+
     // 세대 신청현황 확인 (기존 Form 리스트들 확인)
     @GetMapping("/applications")
     public List<FormDto> readAllForm() {
         return applyFormService.readAllForms();
     }
-
 
     // Form 리스트 하나 확인
     @GetMapping("/applications/{applicationId}")
@@ -69,6 +86,17 @@ public class ApplyFormController {
     }
 
 
+
+
+
+
+
+
+    // Form 하나 선택 후 삭제
+    @PostMapping("/applications/{applicationId}/cancel")
+    public void cancelApplication() {
+
+    }
 
 
 
