@@ -59,7 +59,6 @@ public class ApplyFormController {
     }
 
 
-
     // Form 리스트 하나 확인
     @GetMapping("/applications/{applicationId}")
     public FormDto selectApplication(

@@ -20,6 +20,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -75,37 +77,23 @@ public class ApplyFormService {
     // 사용자가 최종 신청서 완료 = 결정
     public FormDto finalizeApplication(FinalizeApplicationDto finalizeDto) {
 
-        // 최종으로 신청할 userId을 찾는다 (user의 Pk를 사용해야함)
-        User user = userRepository.findById(finalizeDto.getUserId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        // 유저 찾기
+        User currentUser = facade.extractUser();
+        log.info(currentUser.getUsername());
+        log.info(currentUser.getUserId());
+        log.info(currentUser.getPhoneNumber());
 
-        // 나중에는 Auth로 찾을수도 있음
-        // 0328 타입 캐스팅 문제 생겼음, FormUserDetails 타입이 아니여서
-        // principal 객체 타입 확인 -> 타입 캐스팅 필요 // 일단 FormUserDetails 잘못 만든것은 확실함 ㅇㅇ;
-//        User currentUser = facade.extractUser();
-//        System.out.println(currentUser.getUsername());
-//        System.out.println(currentUser.getUserId());
-//        System.out.println(currentUser.getPhoneNumber());
-
-        // 폼도 찾아보아요
-        FormEntity formEntity = formRepository.findByUserId(finalizeDto.getUserId())
+        // User 정보로, 저장된 폼들 찾아보기
+        List<FormEntity> formEntities = formRepository.findAllByUserId(currentUser.getId());
+        // 최종적으로 신청할 신청서 Id = Dto.getFormId 인 것 찾기
+        FormEntity formEntity = formEntities.stream()
+                .filter(found -> found.getId().equals(finalizeDto.getFormId()))
+                .findFirst()
                 .orElseThrow(() -> new RuntimeException("Form not found with id: " + finalizeDto.getFormId()));
-//        FormEntity formEntity = formRepository.findByUserId(Long.valueOf(finalizeDto.getUserId()))
-//                .orElseThrow(() -> new RuntimeException("Form not found with id: " + finalizeDto.getFormId()));
-
-
-        // 이후 totalPrice를 계산하는 로직
-        /* 03-27 (stream으로 줄일 수 있을 것 같음)
-        Integer totalPrice = 0;
-        // totalPrice 계산 로직
-        List<WasteApplicationEntity> wasteApplications = formEntity.getWasteApplications();
-        for (WasteApplicationEntity wasteApplication : wasteApplications) {
-            WasteEntity waste = wasteApplication.getWaste();
-            Integer price = waste.getPrice();
-            Integer quantity = wasteApplication.getQuantity();
-            totalPrice += price * quantity;
+        if (!formEntity.getUser().getId().equals(currentUser.getId())) {
+            throw new RuntimeException("해당 폼은 user의 form과 연관관계가 없습니다");
         }
-         */
+
         Integer totalPrice = formEntity.getWasteApplications().stream()
                 .mapToInt(wasteApplication ->
                         wasteApplication.getWaste().getPrice() * wasteApplication.getQuantity())
@@ -123,14 +111,18 @@ public class ApplyFormService {
 
     // 기존 폼 리스트들 확인 확인
     public List<FormDto> readAllForms() {
-        // 일단 어떤 유저인지 확인
-        User user = facade.extractUser();
+        // 현재 로그인 한 유저의 정보만 가져오기
+        User currentUser = facade.extractUser();
+        log.info("Current user ID: {}", currentUser.getUserId());
 
-        List<FormDto> list = new ArrayList<>();
-        for (FormEntity form : formRepository.findAll()) {
-            FormDto formDto = FormDto.fromEntity(form);
-            list.add(formDto);
-        }
+        // 현재 사용자에 속한 폼만 조회
+        List<FormEntity> forms = formRepository.findAllByUserId(currentUser.getId());
+
+        // DTO 변환
+        List<FormDto> list = forms.stream()
+                .map(FormDto::fromEntity)
+                .collect(Collectors.toList());
+
         return list;
     }
 
@@ -139,7 +131,7 @@ public class ApplyFormService {
         // 현재 사용자 정보 추출
         User user = facade.extractUser();
 
-        // 사용자 ID와 폼 IID를 기반으로 폼 검색
+        // 사용자 ID와 폼 ID를 기반으로 폼 검색
         FormEntity formEntity = formRepository.findByIdAndUserId(applicationId, user.getId())
                 .orElseThrow(()-> new EntityNotFoundException(
                         "Form not found with id: " + applicationId + " for user: " + user.getId()));
