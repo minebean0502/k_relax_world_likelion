@@ -11,13 +11,13 @@ import lombok.*;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id;                    // 유저의 PK
     @Setter
-    private String username;
+    private String username;            // 유저의 이름
     @Setter
-    private String userId;
+    private String userId;              // 유저의 ID
     @Setter
-    private String password;
+    private String password;            // 유저의 비밀번호
     @Setter
     private String phoneNumber;
     @Setter

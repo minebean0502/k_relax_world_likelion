@@ -1,0 +1,232 @@
+{
+	"info": {
+		"_postman_id": "cc128750-a449-4fb7-a753-746da2d97528",
+		"name": "1차 종프",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32354274"
+	},
+	"item": [
+		{
+			"name": "로그인 폴더",
+			"item": [
+				{
+					"name": "Post /v1/user/login",
+					"request": {
+						"method": "POST",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Post /v1/user/signup",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\" : \"chaewoon\",\r\n    \"userId\" : \"chaewoon\",\r\n    \"password\" : \"password1\",\r\n    \"password-check\" : \"password1\",\r\n    \"phoneNumber\" : \"010-2610-4576\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/v1/user/signup",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v1",
+								"user",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post /v1/user/login-custom",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\" : \"chaewoon\",\r\n    \"userId\" : \"chaewoon\",\r\n    \"password\" : \"password1\",\r\n    \"password-check\" : \"password1\",\r\n    \"phoneNumber\" : \"010-2610-4576\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/v1/user/signup",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v1",
+								"user",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "서비스 폴더",
+			"item": [
+				{
+					"name": "Post /waste/apply",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user\" : \"1\",\r\n    \"date\" : \"03-26\",\r\n    \"location\" : \"Anyang\",\r\n    \"totalPrice\" : 10000\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/waste/test?itemId=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"waste",
+								"test"
+							],
+							"query": [
+								{
+									"key": "itemId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post /waste/apply/add-waste-item",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTcxMTUxOTcyOSwiZXhwIjoxNzE0MTExNzI5fQ.pgk0uOfn80I6TdStlfyGsdkySwWOLGCiyZu0Bn22jKkdAM8je8NNMdiNh_y9f45K",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"formId\" : 1,\r\n    \"id\": 1,\r\n    \"quantity\" : 5,\r\n    \"date\" : \"2024-03-27\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/waste/apply/add-waste-item",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"waste",
+								"apply",
+								"add-waste-item"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post /waste/apply/add-waste-item Copy",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTcxMTUxOTcyOSwiZXhwIjoxNzE0MTExNzI5fQ.pgk0uOfn80I6TdStlfyGsdkySwWOLGCiyZu0Bn22jKkdAM8je8NNMdiNh_y9f45K",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"formId\" : 1,\r\n    \"id\": 1,\r\n    \"quantity\" : 5,\r\n    \"date\" : \"2024-03-27\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/waste/apply/add-waste-item",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"waste",
+								"apply",
+								"add-waste-item"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post /waste/applications",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user\" : \"1\",\r\n    \"date\" : \"03-26\",\r\n    \"location\" : \"Anyang\",\r\n    \"totalPrice\" : 10000\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/waste/applicatiions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"waste",
+								"applicatiions"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

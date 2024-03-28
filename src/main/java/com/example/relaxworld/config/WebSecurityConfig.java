@@ -27,6 +27,7 @@ public class WebSecurityConfig {
                 // csrf  보안 헤제
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
+                        // 권한이 없어도 접근 가능
                         .requestMatchers(
                                 "/v1/user/login",
                                 "/v1/user/signup",
@@ -35,8 +36,9 @@ public class WebSecurityConfig {
                                 "/v1/user/idpw/pw/find"
                         )
                         .anonymous()
+                        // 권한이 있을 때 접근 가능
                         .requestMatchers(
-                                "waste/**"
+                                "/waste/**"
                         )
                         .authenticated()
                 )

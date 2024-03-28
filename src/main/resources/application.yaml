@@ -2,12 +2,14 @@ spring:
   datasource:
     url: jdbc:sqlite:db.sqlite
     driver-class-name: org.sqlite.JDBC
-
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: create-drop
     database-platform: org.hibernate.community.dialect.SQLiteDialect
     show-sql: true
+#  sql:
+#    init:
+#      mode: always
 
 # 커스텀 설정(Spring 내부 설정 아님)
 jwt:

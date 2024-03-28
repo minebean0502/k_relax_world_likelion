@@ -2,42 +2,43 @@ package com.example.relaxworld.waste.controller;
 
 import com.example.relaxworld.waste.dto.FinalizeApplicationDto;
 import com.example.relaxworld.waste.dto.FormDto;
-import com.example.relaxworld.waste.dto.SelectWasteFormDto;
+import com.example.relaxworld.waste.dto.WasteApplicationDto;
 import com.example.relaxworld.waste.dto.WasteItemDto;
 import com.example.relaxworld.waste.service.ApplyFormService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
-@RestController("waste")
-@RequestMapping
+@RestController
+@RequestMapping("waste")
 @RequiredArgsConstructor
 public class ApplyFormController {
     private final ApplyFormService applyFormService;
 
     // 서비스를 선택한 시점에서 임시로 폼을 생성
     @PostMapping("/apply")
-    public ResponseEntity<Long> createTempForm(
+    public ResponseEntity<FormDto> createTempForm(
             @RequestParam
             String username
     ) {
-        Long formId = applyFormService.createTempForm(username);
-        return ResponseEntity.ok(formId);
+        FormDto formDto = applyFormService.createTempForm(username);
+        log.info(formDto.getId() + "번 form이 임시로 생성되었습니다.");
+        return ResponseEntity.ok(formDto);
     }
 
     // 유저가 버릴 쓰레기를 선택할 로직
     // 다른 쓰레기를 여러번 반복해서 선택 할 수 있음 (신청 중)
     @PostMapping("/apply/add-waste-item")
-    public ResponseEntity<?> addWasteItem(
+    public ResponseEntity<WasteApplicationDto> addWasteItem(
             @RequestBody
             WasteItemDto wasteItemDto
     ) {
-        applyFormService.addWasteItem(wasteItemDto);
-        return ResponseEntity.ok().build();
+        WasteApplicationDto wasteApplicationDto = applyFormService.addWasteItem(wasteItemDto);
+        return ResponseEntity.ok(wasteApplicationDto);
     }
 
 
@@ -51,7 +52,22 @@ public class ApplyFormController {
         return ResponseEntity.ok(formDto);
     }
 
+    // 세대 신청현황 확인 (기존 Form 리스트들 확인)
+    @GetMapping("/applications")
+    public List<FormDto> readAllForm() {
+        return applyFormService.readAllForms();
+    }
 
+
+
+    // Form 리스트 하나 확인
+    @GetMapping("/applications/{applicationId}")
+    public FormDto selectApplication(
+            @PathVariable("applicationId")
+            Long applicationId
+    ) {
+        return applyFormService.readOneForm(applicationId);
+    }
 
 
 
@@ -106,25 +122,11 @@ public class ApplyFormController {
 
     // [결제 수단 선택 // 신용카드 or 간편 결제]
 
-    // 세대 신청현황 확인 (기존 Form 리스트들 확인)
-    @GetMapping("/applications")
-    // public FormDto formlists() { // 나중에 이걸로 바꾸기
-    public void checkApplications() {
-
-        // 그 사람 ID로 신청한 list들 반환
-        // return formService.checklists();
-    }
 
 
-    // Form 리스트 하나 확인
-    @GetMapping("/applications/{applicationId}")
-    public void selectApplication(
-            @PathVariable("applicationId")
-            Long id,
-            FormDto dto
-    ) {
 
-    }
+
+
 
     // 결제 취소 신청 페이지 [당분간은 안건드림
     @GetMapping("/applications/{applicationId}/refund")

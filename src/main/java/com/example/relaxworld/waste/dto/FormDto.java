@@ -8,17 +8,24 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FormDto {
-    private Long id;
-    private String username;
-    private String date;
-    private Integer totalPrice;
+    private Long id;            // 폼의 ID
+    private String userId;      // 신청한 유저의 PK
+    private String date;        // 신청한 날짜 (버릴날짜 X)
+    private String location;    // 어디에 버릴 지
+
+    private Integer totalPrice; // 전체 가격은?
+    private String status;      // 결제 상태는?
+    private Long paymentId;     // 어떤 결제 수단으로 했는지?
 
     public static FormDto fromEntity(FormEntity entity) {
         return FormDto.builder()
                 .id(entity.getId())
-                .username(entity.getUser().getUsername())
+                .userId(entity.getUser().getUserId())
                 .date(entity.getDate())
+                .location(entity.getLocation())
                 .totalPrice(entity.getTotalPrice())
+                .status(entity.getStatus())
+                .paymentId(entity.getPaymentId())
                 .build();
     }
 }

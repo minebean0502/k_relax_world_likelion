@@ -15,27 +15,25 @@ import java.util.List;
 public class FormEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id;                // 폼의 ID PK
 
     @Setter
     @ManyToOne
-    @JoinColumn(name = "username")
-    private User user;  // 나중에 UserEntity 타입 변환
-                            // private UserEntity user;
-    @Setter
-    private String date;      // 일단 날짜 표시는 이렇게 둠
-    @Setter
-    private String location;
-    @Setter
-    private String status;
-    @Setter
-    private Integer totalPrice;
+    @JoinColumn(name = "user_Id")
+    private User user;              // 신청한 유저의 PK
 
+    @Setter
+    private String date;            // 신청한 날짜 (버릴 날짜 X)
+    @Setter
+    private String location;        // 어디에 버릴 지
+    @Setter
+    private Integer totalPrice;     // 결제 해야 할 전체 금액은?
+    @Setter
+    private String status;          // 결제 상태는?
     @Setter
     // @OneToOne
     // @JoinColumn(name = "paymentId")
-    private Long paymentId; // 나중에 PaymentEntity 타입 변환
-                            // private PaymentEntity payment
+    private Long paymentId;         // 어떤 결제 수단으로 결제 했는가?
 
     @OneToMany(mappedBy = "form")
     private List<WasteApplicationEntity> wasteApplications = new ArrayList<>();

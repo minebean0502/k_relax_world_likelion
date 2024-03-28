@@ -26,6 +26,8 @@ public class CustomUserDetails implements UserDetails {
     private String phoneNumber;
     @Setter
     private String userRole;
+    @Getter
+    private User entity;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+// 나중에 쓰레기 추가용?
 public class WasteDto {
     private Long id;
     private String description;

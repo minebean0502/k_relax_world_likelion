@@ -82,7 +82,7 @@ public class JpaUserDetailsManager implements UserDetailsManager {
                 .userId(userDetails.getUserId())
                 .password(userDetails.getPassword())
                 .phoneNumber(userDetails.getPhoneNumber())
-                .userRole("ROLE_REGISTER")
+                .userRole("REGISTER")
                 .build();
 
         userRepository.save(newUser);

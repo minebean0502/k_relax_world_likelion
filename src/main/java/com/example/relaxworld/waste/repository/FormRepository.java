@@ -7,5 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface FormRepository extends JpaRepository<FormEntity, Long> {
-    List<FormEntity> findByUserId(Long userId);
+    Optional<FormEntity> findByUserId(Long userId);
+
+    Optional<FormEntity> findByIdAndUserId(Long formId, Long userId);
 }
