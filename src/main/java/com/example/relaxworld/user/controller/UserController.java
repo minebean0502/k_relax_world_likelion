@@ -1,22 +1,36 @@
 package com.example.relaxworld.user.controller;
 
+import com.example.relaxworld.user.entity.User;
+import com.example.relaxworld.user.repository.UserRepository;
 import com.example.relaxworld.user.service.JpaUserDetailsManager;
 import com.example.relaxworld.user.dto.CustomUserDetails;
 import com.example.relaxworld.jwt.dto.JwtRequestDto;
 import com.example.relaxworld.jwt.dto.JwtResponseDto;
 import com.example.relaxworld.user.entity.ModifyPasswordRequest;
+import com.example.relaxworld.user.service.S3UploadService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @RestController
 @RequestMapping("v1/user")
 @RequiredArgsConstructor
 public class UserController {
+    private final UserRepository userRepository;
     private final JpaUserDetailsManager manager;
     private final PasswordEncoder passwordEncoder;
+    private final S3UploadService s3UploadService;
 
     // 로그인 v1/user/login
     @PostMapping("login")
@@ -30,24 +44,25 @@ public class UserController {
     // 회원가입 v1/user/signup
     @PostMapping("signup")
     public String signUp(
-            @RequestParam("username")
+            @RequestPart("username")
             String username,
-            @RequestParam("userId")
+            @RequestPart("userId")
             String userId,
-            @RequestParam("password")
+            @RequestPart("password")
             String password,
-            @RequestParam("password-check")
+            @RequestPart("password-check")
             String passwordCheck,
-            @RequestParam("phoneNumber")
-            String phoneNumber
-
-    ) {
+            @RequestPart("phoneNumber")
+            String phoneNumber,
+            @RequestPart(required = false) MultipartFile img
+    ) throws IOException {
         if (password.equals(passwordCheck)){
             manager.createUser(CustomUserDetails.builder()
                     .username(username)
                     .userId(userId)
                     .password(passwordEncoder.encode(password))
                     .phoneNumber(phoneNumber)
+                    .image(s3UploadService.uploadFile(img))
                     .build());
             // 회원가입 성공 후 로그인 페이지로 이동
             return "회원가입 성공";
@@ -66,6 +81,7 @@ public class UserController {
     ) {
         return manager.idFind(phoneNumber);
     }
+
 
     // pw찾기 페이지 /v1/user/idpw/pw/find
     @GetMapping("idpw/pw/find")
@@ -86,4 +102,25 @@ public class UserController {
     ) {
         return manager.updatePassword(request);
     }
+
+    @PostMapping("image/modify")
+    public ResponseEntity<Object> imageModify(
+            @RequestPart String userId,
+            @RequestPart(required = false) MultipartFile image
+    ) throws IOException {
+        Map<String, String> map = new HashMap<>();
+        try{
+            Optional<User> user = userRepository.findByUserId(userId);
+
+            User userEntity = user.get();
+            userEntity.setImage(s3UploadService.uploadFile(image));
+            userRepository.save(userEntity);
+
+            map.put("result", "사진 등록 성공");
+        } catch (Exception e){
+            map.put("error", e.toString());
+        }
+        return new ResponseEntity<>(map, HttpStatus.OK);
+    }
+
 }

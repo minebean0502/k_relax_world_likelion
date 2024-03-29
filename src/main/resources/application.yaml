@@ -24,3 +24,22 @@ jwt:
     mode: HTML5
     cache: false
     template-resolver-order: 0
+
+cloud:
+  aws:
+    s3:
+      bucket: yunbaebucket
+    credentials:
+      access-key: AKIA5FTZDHFN7XF4DLPM
+      secret-key: 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
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
+    # multipartFile 용량 늘려주는 설정
+    spring:
+      servlet:
+        multipart:
+          max-file-size: 10MB
+          max-request-size: 10MB

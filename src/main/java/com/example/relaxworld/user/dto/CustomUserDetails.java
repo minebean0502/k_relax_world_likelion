@@ -26,6 +26,8 @@ public class CustomUserDetails implements UserDetails {
     private String phoneNumber;
     @Setter
     private String userRole;
+    @Setter
+    private String image;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -45,6 +47,7 @@ public class CustomUserDetails implements UserDetails {
         userDetails.setUserId(entity.getUserId());
         userDetails.setPassword(entity.getPassword());
         userDetails.setPhoneNumber(entity.getPhoneNumber());
+        userDetails.setImage(entity.getImage());
         return userDetails;
     }
 

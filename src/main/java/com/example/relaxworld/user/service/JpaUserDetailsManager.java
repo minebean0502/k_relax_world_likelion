@@ -82,6 +82,7 @@ public class JpaUserDetailsManager implements UserDetailsManager {
                 .userId(userDetails.getUserId())
                 .password(userDetails.getPassword())
                 .phoneNumber(userDetails.getPhoneNumber())
+                .image(userDetails.getImage())
                 .userRole("ROLE_REGISTER")
                 .build();
 

@@ -32,7 +32,8 @@ public class WebSecurityConfig {
                                 "/v1/user/signup",
                                 "/v1/user/idpw/modify",
                                 "/v1/user/idpw/id/find",
-                                "/v1/user/idpw/pw/find"
+                                "/v1/user/idpw/pw/find",
+                                "/v1/user/image/upload"
                         )
                         .anonymous()
                         .requestMatchers(

@@ -22,6 +22,8 @@ public class User {
     private String phoneNumber;
     @Setter
     private String userRole;
+    @Setter
+    private String image;
 
     /*
     @Setter
