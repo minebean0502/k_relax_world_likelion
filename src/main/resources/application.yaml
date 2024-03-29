@@ -30,8 +30,8 @@ cloud:
     s3:
       bucket: yunbaebucket
     credentials:
-      access-key: AKIA5FTZDHFN7XF4DLPM
-      secret-key: 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
+      access-key:
+      secret-key:
     region:
       static: ap-northeast-2
       auto: false
