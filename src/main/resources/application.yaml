@@ -30,8 +30,6 @@ jwt:
 #    s3:
 #      bucket: yunbaebucket
 #    credentials:
-#      access-key:
-#      secret-key:
 #    region:
 #      static: ap-northeast-2
 #      auto: false
