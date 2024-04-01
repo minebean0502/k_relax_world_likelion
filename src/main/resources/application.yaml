@@ -19,6 +19,7 @@ jwt:
   #    console:
   #      enabled: true
   #      path: /h2-console
+
   thymeleaf:
     prefix: classpath:templates/
     check-template-location: true
@@ -26,3 +27,11 @@ jwt:
     mode: HTML5
     cache: false
     template-resolver-order: 0
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG
+    com.example.myapp: DEBUG
+  file:
+    name: app.log

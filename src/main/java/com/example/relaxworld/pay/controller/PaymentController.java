@@ -71,6 +71,7 @@ public class PaymentController {
     public String successPaymentPage() {
         return "success-payment";
     }
+
     @GetMapping("/fail-payment")
     public String failPaymentPage() {
         return "fail-payment";

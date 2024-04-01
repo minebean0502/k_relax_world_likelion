@@ -36,14 +36,17 @@ public class ApplyFormService {
     private final AuthenticationFacade facade;
 
     // 사용자가 서비스 선택 = 임시로 폼을 생성
-    public FormDto createTempForm(String username) {
+    public FormDto createTempForm() {
+        // 유저 정보 가져오기
+        User currentUser = facade.extractUser();
+        /* 0328 - 유저 정보는 Bearer 토큰에서 가져올 것
         // 일단 유저 정보 가져옴
-        User user = userRepository.findByUsername(username)
+        User user = userRepository.findByUsername(currentUser.getUsername())
                 .orElseThrow(() -> new RuntimeException("User not found: " + username));
-
+         */
         // 임시로 form을 만든다
         FormEntity formEntity = FormEntity.builder()
-                .user(user)
+                .user(currentUser)
                 .build();
 
         // 폼을 저장시키고 생성된 formDto 정보 반환
@@ -81,9 +84,6 @@ public class ApplyFormService {
 
         // 유저 찾기
         User currentUser = facade.extractUser();
-        log.info(currentUser.getUsername());
-        log.info(currentUser.getUserId());
-        log.info(currentUser.getPhoneNumber());
 
         // User 정보로, 저장된 폼들 찾아보기
         List<FormEntity> formEntities = formRepository.findAllByUserId(currentUser.getId());

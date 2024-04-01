@@ -9,13 +9,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("waste")
+@RequestMapping("/v1/user/waste")
 @RequiredArgsConstructor
 public class ApplyFormController {
     private final ApplyFormService applyFormService;
@@ -23,10 +24,8 @@ public class ApplyFormController {
     // 서비스를 선택한 시점에서 임시로 폼을 생성
     @PostMapping("/apply")
     public ResponseEntity<FormDto> createTempForm(
-            @RequestParam
-            String username
     ) {
-        FormDto formDto = applyFormService.createTempForm(username);
+        FormDto formDto = applyFormService.createTempForm();
         log.info(formDto.getId() + "번 form이 임시로 생성되었습니다.");
         return ResponseEntity.ok(formDto);
     }
@@ -68,8 +67,6 @@ public class ApplyFormController {
         }
     }
 
-    // ------------------------------------------- //
-
     // 세대 신청현황 확인 (기존 Form 리스트들 확인)
     @GetMapping("/applications")
     public List<FormDto> readAllForm() {
@@ -86,12 +83,8 @@ public class ApplyFormController {
     }
 
 
-
-
-
-
-
-
+    // ------------------------------------------------ //
+    // 미완성
     // Form 하나 선택 후 삭제
     @PostMapping("/applications/{applicationId}/cancel")
     public void cancelApplication() {

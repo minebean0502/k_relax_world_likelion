@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>로그인 화면입니다</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<link rel="icon" href="data:;base64,iVBORw0KGgo=">
+<body>
+<h2>로그인</h2>
+<form id="loginForm">
+    <div>
+        <label for="userId">계정 ID: </label>
+        <input type="text" id="userId" name="userId" required>
+    </div>
+    <div>
+        <label for="password">비밀번호: </label>
+        <input type="password" id="password" name="password" required>
+    </div>
+    <button type="submit">로그인</button>
+    <h3>이 로그인 페이지는 현재 작동중인 페이지 입니다.</h3>
+</form>
+</body>
+<script>
+    $(document).ready(function () {
+        $('#loginForm').submit(function (event) {
+            event.preventDefault(); // 폼 기본 동작 제출 방지
+
+            const userId = $('#userId').val();
+            const password = $('#password').val();
+            const data = { userId, password };
+
+            $.ajax({
+                type: "POST",
+                url: "/v1/user/login",
+                contentType: "application/json",
+                data: JSON.stringify(data),
+                success: function (response) {
+                    const token = response.token;
+                    console.log("로그인 성공", token);
+
+                    if (token) {
+                        localStorage.setItem("jwtToken", token);
+                        window.location.href = "/services";
+                    } else {
+                        console.log("토큰이 반환되지 않았습니다.")
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log("로그인 실패", xhr.responseText);
+                    alert("아이디나 비밀번호가 일치하지 않습니다.")
+                }
+            });
+        });
+    });
+</script>
+</html>

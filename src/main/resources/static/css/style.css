@@ -1,0 +1,158 @@
+.logout-button {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+}
+.container {
+    background-color: #d9f4e6;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.header h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+}
+
+.button {
+    background-color: #34c759;
+    color: white;
+    font-weight: bold;
+    padding: 1rem 2rem;
+    margin-bottom: 2rem;
+    width: 300px;
+    display: block;
+    border-radius: 1rem;
+    text-align: center;
+    text-decoration: none;
+}
+
+.storefront, .barcode {
+    margin-bottom: 2rem;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.storefront {
+    aspect-ratio: 2 / 1;
+    width: 800px;
+    height: 400px;
+}
+
+.barcode-container img {
+    aspect-ratio: 300 / 50;
+    object-fit: cover;
+    width: 300px;
+    height: 50px;
+}
+
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+.kiosk-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    background-color: #4CAF50;
+}
+.kiosk-card {
+    width: 200px;
+    margin: 10px;
+    border-radius: 20px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: 0.3s;
+    cursor: pointer;
+    font-size: 16px;
+    color: black;
+}
+.kiosk-card:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+.card-content {
+    padding: 16px;
+    text-align: center;
+}
+.card-icon {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 16px;
+    background-size: cover;
+}
+.card-icon.home {
+    background-image: url('/images/apartment.jpg');
+}
+.card-icon.recycle {
+    background-image: url('/images/apartment.jpg');
+}
+.card-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+.footer-bar {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 50px;
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    font-size: 18px;
+}
+.info-container {
+    width: 300px;
+    background-color: #fff;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+}
+.info-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.info-icon {
+    width: 50px;
+    height: 50px;
+    background-color: #000; /* Replace with icon image */
+    margin-right: 10px;
+}
+.info-title {
+    font-size: 18px;
+    font-weight: bold;
+}
+.info-content {
+    font-size: 16px;
+}
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+.button-container {
+    display: flex;
+    justify-content: space-around;
+}
+button {
+    padding: 10px 20px;
+    margin-top: 20px;
+    border: none;
+    border-radius: 10px;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+button:hover {
+    background-color: #367c39;
+}

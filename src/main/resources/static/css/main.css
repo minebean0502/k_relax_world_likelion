@@ -1,0 +1,57 @@
+/* 기본 스타일 초기화 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+}
+
+.header {
+    text-align: center;
+}
+
+.apartment-img {
+    width: 100%;
+    height: auto;
+    border-bottom: 5px solid #004d40;
+}
+
+.title {
+    margin-top: 20px;
+    color: #004d40;
+}
+
+.navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+.button {
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: #004d40;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: #00796b;
+}
+
+.footer {
+    text-align: center;
+    margin-top: 40px;
+}

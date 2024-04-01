@@ -27,20 +27,61 @@ public class WebSecurityConfig {
                 // csrf  보안 헤제
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        // 권한이 없어도 접근 가능
+                        /*
+                        // 권한이 없는 사람만 접근 가능
+                        // 프론트용
                         .requestMatchers(
-                                "/v1/user/login",
-                                "/v1/user/signup",
-                                "/v1/user/idpw/modify",
-                                "/v1/user/idpw/id/find",
-                                "/v1/user/idpw/pw/find"
+                                // user 관련
+                                "/home",
+                                "/reigster",
+                                "/login",
+                                "/idpw/**"
                         )
                         .anonymous()
-                        // 권한이 있을 때 접근 가능
+
+                        // 권한이 없는 사람만 접근 가능
+                        // 백엔드용
                         .requestMatchers(
+                                // user 관련
+                                "/v1/user/**"
+                        )
+                        .anonymous()
+
+                        // 권한이 있어야만 접근 가능
+                        // 프론트용
+                        .requestMatchers(
+                                // common
+                                // "/services",
+
+                                // waste 관련
                                 "/waste/**"
                         )
                         .authenticated()
+
+                        // 권한이 있어야만 접근 가능
+                        // 백엔드용
+                        .requestMatchers(
+                                "/v1/user/**"
+                        )
+                        .authenticated()
+
+                        // 모든 사람에 대한 접근 가능
+                        .requestMatchers(
+                                // static 폴더에 대한 경로는 모두 ON
+                                "/js/**",
+                                "/css/**",
+                                "/images/**"
+                        )
+                        // static에 대한 모든 경로 허용
+                        .permitAll()
+
+                        // 테스트용
+                        .requestMatchers(
+                                "/services"
+                        )
+                        .permitAll()
+                         */
+                        .anyRequest().permitAll()
                 )
 
                 .sessionManagement(session -> session

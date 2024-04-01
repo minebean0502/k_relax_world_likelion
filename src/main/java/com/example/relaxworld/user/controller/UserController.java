@@ -7,28 +7,32 @@ import com.example.relaxworld.jwt.dto.JwtResponseDto;
 import com.example.relaxworld.user.entity.ModifyPasswordRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
-@RestController
-@RequestMapping("v1/user")
+@Controller
+@RequestMapping("/v1/user")
 @RequiredArgsConstructor
 public class UserController {
     private final JpaUserDetailsManager manager;
     private final PasswordEncoder passwordEncoder;
 
     // 로그인 v1/user/login
-    @PostMapping("login")
-    public JwtResponseDto login(
+    @PostMapping("/login")
+    public ResponseEntity<JwtResponseDto> login(
             @RequestBody
             JwtRequestDto dto
     ) {
-        return manager.login(dto);
+        JwtResponseDto jwtResponseDto = manager.login(dto);
+        log.info(jwtResponseDto.getToken());
+        return ResponseEntity.ok(jwtResponseDto);
     }
 
     // 회원가입 v1/user/signup
-    @PostMapping("signup")
+    @PostMapping("/signup")
     public String signUp(
             @RequestParam("username")
             String username,
@@ -40,7 +44,6 @@ public class UserController {
             String passwordCheck,
             @RequestParam("phoneNumber")
             String phoneNumber
-
     ) {
         if (password.equals(passwordCheck)){
             manager.createUser(CustomUserDetails.builder()
@@ -50,16 +53,17 @@ public class UserController {
                     .phoneNumber(phoneNumber)
                     .build());
             // 회원가입 성공 후 로그인 페이지로 이동
-            return "회원가입 성공";
+            return "redirect:/home";
         }
         else{
             // 비밀번호 불일치
-            return "비밀번호 불일치";
+            return "redirect:/register";
         }
     }
 
     // id찾기 페이지 /v1/user/idpw/id/find
-    @GetMapping("idpw/id/find")
+    @ResponseBody
+    @GetMapping("/idpw/id/find")
     public String idFind(
             @RequestParam("phone_number")
             String phoneNumber
@@ -68,7 +72,8 @@ public class UserController {
     }
 
     // pw찾기 페이지 /v1/user/idpw/pw/find
-    @GetMapping("idpw/pw/find")
+    @ResponseBody
+    @GetMapping("/idpw/pw/find")
     public String pwFind(
             @RequestParam("userId")
             String userId,
@@ -79,7 +84,8 @@ public class UserController {
     }
 
     // (임시)비밀번호 수정 /v1/user/idpw/modify
-    @PostMapping("idpw/modify")
+    @ResponseBody
+    @PostMapping("/idpw/modify")
     public String idpwModify(
             @RequestBody
             ModifyPasswordRequest request

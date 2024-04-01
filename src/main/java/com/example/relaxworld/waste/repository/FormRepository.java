@@ -12,4 +12,5 @@ public interface FormRepository extends JpaRepository<FormEntity, Long> {
     List<FormEntity> findAllByUserId(Long userId);
 
     Optional<FormEntity> findByIdAndUserId(Long formId, Long userId);
+
 }
