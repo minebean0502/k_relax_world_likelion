@@ -25,7 +25,7 @@ public class OrderController {
                         Model model) {
         model.addAttribute("message", message);
         model.addAttribute("orderUid", id);
-        return "order";
+        return "/resources/templates/tempHtml/order.html";
     }
     @PostMapping("/order")
     public String autoOrder() {

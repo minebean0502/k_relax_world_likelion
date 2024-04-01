@@ -42,44 +42,44 @@
 
 
 
-<!--    <script>-->
-<!--        $(document).ready(function() {-->
-<!--            // 서비스 페이지로 이동하려는 버튼 또는 링크에 대한 클릭 이벤트 핸들러-->
-<!--            $("#goToServices").on("click", function(e) {-->
-<!--                e.preventDefault(); // 기본 이벤트를 방지합니다.-->
+    <script>
+        $(document).ready(function() {
+            // 서비스 페이지로 이동하려는 버튼 또는 링크에 대한 클릭 이벤트 핸들러
+            $("#goToServices").on("click", function(e) {
+                e.preventDefault(); // 기본 이벤트를 방지합니다.
 
-<!--                const jwtToken = localStorage.getItem('jwtToken'); // 로컬 스토리지에서 JWT 토큰 가져오기-->
+                const jwtToken = localStorage.getItem('jwtToken'); // 로컬 스토리지에서 JWT 토큰 가져오기
 
-<!--                if (jwtToken) {-->
-<!--                    // AJAX 요청을 사용하여 서버에 인증 정보를 포함하여 /services 경로로 요청을 보냅니다.-->
-<!--                    $.ajax({-->
-<!--                        url: '/services', // 요청을 보낼 경로-->
-<!--                        type: 'GET', // HTTP 요청 메서드-->
-<!--                        contentType: "application/json", // 서버가 JSON 형태의 데이터를 받기를 기대-->
-<!--                        beforeSend: function(xhr) {-->
-<!--                            xhr.setRequestHeader("Authorization", "Bearer " + jwtToken);-->
-<!--                        },-->
-<!--                        success: function(response) {-->
-<!--                            // 요청이 성공하면, 서버로부터 받은 응답(예: HTML 페이지 또는 데이터)을 처리합니다.-->
-<!--                            // 예: document.location.href = '/services'; 페이지 이동-->
-<!--                            // 또는 페이지 내용을 동적으로 업데이트할 수 있습니다.-->
-<!--                            console.log(response);-->
-<!--                            console.log(jwtToken);-->
-<!--                            // 요청이 성공하면, /services 페이지로 리다이렉트합니다.-->
-<!--                            window.location.href = '/services';-->
-<!--                        },-->
-<!--                        error: function(xhr, status, error) {-->
-<!--                            // 인증 실패 또는 기타 오류 처리-->
-<!--                            console.error("Error: " + error);-->
-<!--                            // 필요에 따라 사용자를 로그인 페이지로 리다이렉트할 수 있습니다.-->
-<!--                        }-->
-<!--                    });-->
-<!--                } else {-->
-<!--                    // JWT 토큰이 없는 경우, 예를 들어 로그인 페이지로 이동시킬 수 있습니다.-->
-<!--                    console.log("JWT 토큰이 없습니다.");-->
-<!--                }-->
-<!--            });-->
-<!--        });-->
-<!--    </script>-->
+                if (jwtToken) {
+                    // AJAX 요청을 사용하여 서버에 인증 정보를 포함하여 /services 경로로 요청을 보냅니다.
+                    $.ajax({
+                        url: '/services', // 요청을 보낼 경로
+                        type: 'GET', // HTTP 요청 메서드
+                        contentType: "application/json", // 서버가 JSON 형태의 데이터를 받기를 기대
+                        beforeSend: function(xhr) {
+                            xhr.setRequestHeader("Authorization", "Bearer " + jwtToken);
+                        },
+                        success: function(response) {
+                            // 요청이 성공하면, 서버로부터 받은 응답(예: HTML 페이지 또는 데이터)을 처리합니다.
+                            // 예: document.location.href = '/services'; 페이지 이동
+                            // 또는 페이지 내용을 동적으로 업데이트할 수 있습니다.
+                            console.log(response);
+                            console.log(jwtToken);
+                            // 요청이 성공하면, /services 페이지로 리다이렉트합니다.
+                            window.location.href = '/services';
+                        },
+                        error: function(xhr, status, error) {
+                            // 인증 실패 또는 기타 오류 처리
+                            console.error("Error: " + error);
+                            // 필요에 따라 사용자를 로그인 페이지로 리다이렉트할 수 있습니다.
+                        }
+                    });
+                } else {
+                    // JWT 토큰이 없는 경우, 예를 들어 로그인 페이지로 이동시킬 수 있습니다.
+                    console.log("JWT 토큰이 없습니다.");
+                }
+            });
+        });
+    </script>
 </body>
 </html>

@@ -31,7 +31,7 @@ public class PaymentController {
                               Model model) {
         RequestPayDto requestDto = paymentService.findRequestDto(id);
         model.addAttribute("requestDto", requestDto);
-        return "payment";
+        return "/resources/templates/tempHtml/payment.html";
     }
     @ResponseBody
     @PostMapping("/payment")
@@ -45,7 +45,7 @@ public class PaymentController {
     }
     @GetMapping("payment/{id}/cancel")
     public String CancelPage(){
-        return "cancel";
+        return "/resources/templates/tempHtml/cancel.html";
     }
     @ResponseBody
     @PostMapping("/cancel")
@@ -69,12 +69,12 @@ public class PaymentController {
     }
     @GetMapping("/success-payment")
     public String successPaymentPage() {
-        return "success-payment";
+        return "/resources/templates/tempHtml/success-payment.html";
     }
 
     @GetMapping("/fail-payment")
     public String failPaymentPage() {
-        return "fail-payment";
+        return "/resources/templates/tempHtml/fail-payment.html";
     }
 
 }

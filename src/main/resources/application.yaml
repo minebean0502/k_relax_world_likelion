@@ -28,10 +28,10 @@ jwt:
     cache: false
     template-resolver-order: 0
 
-logging:
-  level:
-    root: INFO
-    org.springframework.web: DEBUG
-    com.example.myapp: DEBUG
-  file:
-    name: app.log
+#logging:
+#  level:
+#    root: INFO
+#    org.springframework.web: DEBUG
+#    com.example.myapp: DEBUG
+#  file:
+#    name: app.log
