@@ -1,9 +1,12 @@
-package com.example.relaxworld.controller;
+package com.example.relaxworld.pay.controller;
 
-import com.example.relaxworld.dto.PaymentCallbackRequest;
-import com.example.relaxworld.dto.RequestPayDto;
-import com.example.relaxworld.service.PaymentService;
-import com.fasterxml.jackson.core.io.JsonEOFException;
+import com.example.relaxworld.pay.dto.CancelRequest;
+import com.example.relaxworld.pay.dto.PaymentCallbackRequest;
+import com.example.relaxworld.pay.dto.RequestPayDto;
+import com.example.relaxworld.pay.entity.Order;
+import com.example.relaxworld.pay.entity.User;
+import com.example.relaxworld.pay.service.PaymentService;
+import com.example.relaxworld.pay.service.RefundService;
 import com.siot.IamportRestClient.exception.IamportResponseException;
 import com.siot.IamportRestClient.request.AuthData;
 import com.siot.IamportRestClient.request.CancelData;
@@ -12,19 +15,12 @@ import com.siot.IamportRestClient.response.IamportResponse;
 import com.siot.IamportRestClient.response.Payment;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.minidev.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import retrofit2.Call;
-import retrofit2.http.Body;
-import retrofit2.http.Header;
-import retrofit2.http.POST;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.net.HttpURLConnection;
+
 
 @Slf4j
 @Controller
@@ -32,7 +28,6 @@ import java.net.HttpURLConnection;
 public class PaymentController {
 
     private final PaymentService paymentService;
-
     @GetMapping("/payment/{id}")
     public String paymentPage(@PathVariable(name = "id", required = false) String id,
                               Model model) {
@@ -45,42 +40,15 @@ public class PaymentController {
     public ResponseEntity<IamportResponse<Payment>> validationPayment(
             @RequestBody PaymentCallbackRequest request) {
         IamportResponse<Payment> iamportResponse = paymentService.paymentByCallback(request);
-
         log.info("결제 응답={}", iamportResponse.getResponse().toString());
-
         return new ResponseEntity<>(iamportResponse, HttpStatus.OK);
     }
-    @GetMapping("payment/{id}/cancel")
-    public String CancelPage(){
-        return "cancel";
-    }
-    @ResponseBody
-    @PostMapping("/cancel")
-    public ResponseEntity<IamportResponse<Payment>> Cancel(
-            @RequestBody PaymentCallbackRequest request) throws IamportResponseException, IOException {
-        IamportResponse<Payment> iamportResponse= paymentService.PaymentCancel(request);
-        log.info("결제 실패={}",iamportResponse.getResponse().toString());
-        return new ResponseEntity<>(iamportResponse,HttpStatus.OK);
-    }
-    @PostMapping("/users/getToken")
-    public ResponseEntity<IamportResponse<AccessToken>> token(
-            @RequestBody AuthData auth) {
-        return new ResponseEntity<>(new IamportResponse<>(),HttpStatus.OK);
-    }
-    @PostMapping("/payments/cancel")
-    public ResponseEntity<IamportResponse<Payment>> cancel_payment(
-            @RequestHeader("Authorization") String token,
-            @RequestBody CancelData cancel_data
-    ) {
-        return new ResponseEntity<>(new IamportResponse<>(),HttpStatus.OK);
-    }
     @GetMapping("/success-payment")
-    public String successPaymentPage() {
+    public String successPaymentPage(){
         return "success-payment";
     }
     @GetMapping("/fail-payment")
     public String failPaymentPage() {
         return "fail-payment";
     }
-
 }

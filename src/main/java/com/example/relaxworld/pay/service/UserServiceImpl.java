@@ -1,12 +1,10 @@
-package com.example.relaxworld.service;
+package com.example.relaxworld.pay.service;
 
-import com.example.relaxworld.entity.User;
-import com.example.relaxworld.repository.UserRepository;
+import com.example.relaxworld.pay.entity.User;
+import com.example.relaxworld.pay.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.UUID;
 
 @Service
 @Transactional
@@ -19,12 +17,10 @@ public class UserServiceImpl implements UserService{
     public User autoRegister() {
         User user = User.builder()
                 .username("탁민렬")
-               // .username(UUID.randomUUID().toString())
                 .phoneNumber("010-1234-5678")
                 .userId("user")
                 .password("password")
                 .build();
-
         return userRepository.save(user);
     }
 }

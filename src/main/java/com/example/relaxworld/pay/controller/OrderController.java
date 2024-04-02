@@ -1,9 +1,9 @@
-package com.example.relaxworld.controller;
+package com.example.relaxworld.pay.controller;
 
-import com.example.relaxworld.entity.Order;
-import com.example.relaxworld.entity.User;
-import com.example.relaxworld.service.OrderService;
-import com.example.relaxworld.service.UserService;
+import com.example.relaxworld.pay.entity.Order;
+import com.example.relaxworld.pay.entity.User;
+import com.example.relaxworld.pay.service.OrderService;
+import com.example.relaxworld.pay.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

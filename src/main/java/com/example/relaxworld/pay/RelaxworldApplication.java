@@ -1,4 +1,4 @@
-package com.example.relaxworld;
+package com.example.relaxworld.pay;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

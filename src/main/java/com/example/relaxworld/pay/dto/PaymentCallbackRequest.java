@@ -1,7 +1,8 @@
-package com.example.relaxworld.dto;
+package com.example.relaxworld.pay.dto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
@@ -9,4 +10,6 @@ import lombok.Data;
 public class PaymentCallbackRequest {
     private String paymentUid; // 결제 고유 번호
     private String orderUid; // 주문 고유 번호
+
+
 }

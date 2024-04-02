@@ -1,9 +1,6 @@
-package com.example.relaxworld.entity;
+package com.example.relaxworld.pay.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,10 +15,17 @@ public class Payment {
     private Long price;
     private PaymentStatus status;
     private String paymentUid; // 결제 고유 번호
+    @OneToOne(mappedBy = "payment", cascade = CascadeType.ALL)
+    @JoinColumn(name = "order_id")
+    private Order order;
+
     @Builder
-    public Payment(Long price, PaymentStatus status) {
+    public Payment(Long price, PaymentStatus status, String paymentUid,Order order) {
         this.price = price;
         this.status = status;
+        this.paymentUid=paymentUid;
+        this.order=order;
+
     }
     public void changePaymentBySuccess(PaymentStatus status, String paymentUid) {
         this.status = status;

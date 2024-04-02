@@ -1,4 +1,4 @@
-package com.example.relaxworld.entity;
+package com.example.relaxworld.pay.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

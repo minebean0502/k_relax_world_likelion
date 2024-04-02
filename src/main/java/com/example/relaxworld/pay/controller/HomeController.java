@@ -1,4 +1,4 @@
-package com.example.relaxworld.controller;
+package com.example.relaxworld.pay.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

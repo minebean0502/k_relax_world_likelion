@@ -1,8 +1,7 @@
-package com.example.relaxworld.entity;
+package com.example.relaxworld.pay.entity;
 
 //import com.siot.IamportRestClient.response.Payment;
 import jakarta.persistence.*;
-import com.example.relaxworld.entity.Payment;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,7 +24,6 @@ public class Order {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "payment_id")
     private Payment payment;
-
     @Builder
     public Order(Long price, String itemName,String location, String orderUid, User user, Payment payment) {
         this.price = price;

@@ -1,4 +1,4 @@
-package com.example.relaxworld;
+package com.example.relaxworld.pay;
 
 public class SampleController {
 

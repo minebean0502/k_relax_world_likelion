@@ -43,6 +43,7 @@ dependencies {
 	implementation group: 'com.squareup.retrofit2', name: 'converter-gson', version: '2.3.0'
 	implementation 'com.github.iamport:iamport-rest-client-java:0.2.21'
 
+
 	implementation 'org.xerial:sqlite-jdbc:3.41.2.2'
 	runtimeOnly 'org.hibernate.orm:hibernate-community-dialects:6.2.4.Final'
 

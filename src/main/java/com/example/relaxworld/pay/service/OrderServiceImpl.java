@@ -1,11 +1,11 @@
-package com.example.relaxworld.service;
+package com.example.relaxworld.pay.service;
 
-import com.example.relaxworld.entity.Order;
-import com.example.relaxworld.entity.Payment;
-import com.example.relaxworld.entity.PaymentStatus;
-import com.example.relaxworld.entity.User;
-import com.example.relaxworld.repository.OrderRepository;
-import com.example.relaxworld.repository.PaymentRepository;
+import com.example.relaxworld.pay.entity.Order;
+import com.example.relaxworld.pay.entity.Payment;
+import com.example.relaxworld.pay.entity.PaymentStatus;
+import com.example.relaxworld.pay.entity.User;
+import com.example.relaxworld.pay.repository.OrderRepository;
+import com.example.relaxworld.pay.repository.PaymentRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
