@@ -18,9 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @RestController
@@ -113,8 +111,25 @@ public class UserController {
             Optional<User> user = userRepository.findByUserId(userId);
 
             User userEntity = user.get();
+            //S3 스토리지 내에서 기존 이미지 삭제
+            s3UploadService.deleteFile(userEntity.getImage());
+            //User Image에는 이미지의 링크가 들어간다.
             userEntity.setImage(s3UploadService.uploadFile(image));
             userRepository.save(userEntity);
+
+            //추가로 이미지 삽입, 프로필사진 말고 MultipartFile[] 로 여러장 사진을 업로드할 때 코드.
+//            if(image != null){
+//                List<String> fileNames = new ArrayList<>();
+//
+//                for(MultipartFile img : image){
+//
+//                    String filePathAndName = s3UploadService.uploadFile(img);
+//                    fileNames.add(filePathAndName);
+//                }
+//                String dbSaveImages = String.join(",", fileNames);
+//
+//                userEntity.setImage(dbSaveImages);
+//            }
 
             map.put("result", "사진 등록 성공");
         } catch (Exception e){

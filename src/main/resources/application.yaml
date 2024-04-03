@@ -25,9 +25,21 @@ jwt:
     cache: false
     template-resolver-order: 0
 
-    # multipartFile 용량 늘려주는 설정
-    spring:
-      servlet:
-        multipart:
-          max-file-size: 10MB
-          max-request-size: 10MB
+#cloud:
+#  aws:
+#    s3:
+#      bucket:
+#    credentials:
+#      access-key:
+#      secret-key:
+#    region:
+#      static: ap-northeast-2
+#      auto: false
+#    stack:
+#      auto: false
+#    # multipartFile 용량 늘려주는 설정
+#    spring:
+#      servlet:
+#        multipart:
+#          max-file-size: 10MB
+#          max-request-size: 10MB
