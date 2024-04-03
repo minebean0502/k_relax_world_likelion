@@ -12,7 +12,7 @@ document.querySelector('.register').addEventListener('click', function(e) {
     window.location.href = '/register';
 });
 
-document.getElementById('homeCard').addEventListener('click', function() {
+document.getElementById('applicationCard').addEventListener('click', function() {
     alert('홈 이동');
     window.location.href = '/waste/applications';
 });
@@ -27,16 +27,4 @@ document.getElementById('btnCheckMore').addEventListener('click', function() {
 
 document.getElementById('btnNewRequest').addEventListener('click', function() {
     alert('신청하기 클릭됨');
-});
-
-document.addEventListener('DOMContentLoaded', function() {
-    // 세대 사용정보확인 카드에 클릭 이벤트 추가
-    document.getElementById('homeCard').addEventListener('click', function() {
-        window.location.href = '/waste/applications';
-    });
-
-    // 대형 폐기물 카드에 클릭 이벤트 추가
-    document.getElementById('recycleCard').addEventListener('click', function() {
-        window.location.href = '/waste/apply';
-    });
 });

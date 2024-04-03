@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>비밀번호 수정 화면</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="/css/MainUse.css">
+</head>
+<link rel="icon" href="data:;base64,iVBORw0KGgo=">
+
+<body>
+<div class="login-container">
+    <header>
+        <h1>대행 폐기물 키오스크</h1>
+        <div class="time">Wed 03rd March 2:19 PM</div>
+    </header>
+
+    <section class="login-form">
+        <form id="modifyPasswordForm">
+            <div class="input-group">
+                <label for="userId">계정 ID: </label>
+                <input type="text" id="userId" name="userId" required placeholder="아이디">
+            </div>
+            <div class="input-group">
+                <label for="phoneNumber">전화 번호: </label>
+                <input type="text" id="phoneNumber" name="phoneNumber" required placeholder="전화번호">
+            </div>
+            <div class="input-group">
+                <label for="newPassword">새 비밀번호: </label>
+                <input type="password" id="newPassword" name="newPassword" required placeholder="새 비밀번호">
+            </div>
+            <div>
+                <!--   홈 화면으로 돌아가기     -->
+                <button type="button" onclick="location.href='/login'">돌아가기</button>
+                <!--   제출 버튼     -->
+                <button type="submit">비밀번호 수정</button>
+            </div>
+        </form>
+    </section>
+</div>
+<script src="/js/modify.js"></script> <!-- Modify.js 파일 경로가 맞는지 확인하세요 -->
+</body>
+</html>

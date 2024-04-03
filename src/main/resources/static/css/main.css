@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap');
+
 /* 기본 스타일 초기화 */
 * {
     margin: 0;
@@ -5,8 +7,26 @@
     box-sizing: border-box;
 }
 
+#main_wrap {
+    width: 1080px;
+    /*height: 800px;*/
+
+    background-color: #FFF;
+
+    margin: 20px auto;
+
+    border: 1px solid #DDD;
+    border-radius: 5px;
+
+    box-shadow: 3px 3px 5px #DDD;
+
+    padding: 10px;
+
+}
+
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: 'Nanum Gothic', sans-serif;
+    background-color: white;
     line-height: 1.6;
 }
 

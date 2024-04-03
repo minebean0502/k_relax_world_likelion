@@ -1,8 +1,6 @@
 package com.example.relaxworld;
 
-import com.example.relaxworld.user.dto.CustomUserDetails;
 import com.example.relaxworld.user.repository.UserRepository;
-import com.example.relaxworld.waste.entity.FormUserDetails;
 import com.example.relaxworld.user.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;

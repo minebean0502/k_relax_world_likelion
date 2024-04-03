@@ -1,9 +1,8 @@
 package com.example.relaxworld.waste.controller;
 
-import com.example.relaxworld.waste.dto.FinalizeApplicationDto;
-import com.example.relaxworld.waste.dto.FormDto;
-import com.example.relaxworld.waste.dto.WasteApplicationDto;
-import com.example.relaxworld.waste.dto.WasteItemDto;
+import com.example.relaxworld.waste.dto.*;
+import com.example.relaxworld.waste.entity.WasteEntity;
+import com.example.relaxworld.waste.repository.WasteRepository;
 import com.example.relaxworld.waste.service.ApplyFormService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ApplyFormController {
     private final ApplyFormService applyFormService;
+    private final WasteRepository wasteRepository;
 
     // 서비스를 선택한 시점에서 임시로 폼을 생성
     @PostMapping("/apply")
@@ -80,6 +80,22 @@ public class ApplyFormController {
             Long applicationId
     ) {
         return applyFormService.readOneForm(applicationId);
+    }
+
+    // 저장되어 있는 쓰레기의 정보 "전체"를 가져오는 함수
+    @GetMapping("/wastes")
+    public ResponseEntity<List<WasteDto>> getWasteItems() {
+        List<WasteDto> wasteDto = applyFormService.wasteItems();
+        return ResponseEntity.ok(wasteDto);
+    }
+
+    @GetMapping("/{tabIndex}")
+    public ResponseEntity<List<WasteDto>> getWasteItemsByTab(
+            @PathVariable
+            int tabIndex
+    ) {
+        List<WasteDto> wasteDto = applyFormService.getItemsByTab(tabIndex);
+        return ResponseEntity.ok(wasteDto);
     }
 
 

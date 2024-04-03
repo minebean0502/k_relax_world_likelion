@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>키오스크 서비스</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div id='main_wrap'>
+<div class="kiosk-container">
+    <!-- Home card -->
+    <div class="kiosk-card" id="applicationCard">
+        <div class="card-content">
+            <div class="card-icon home"></div>
+            <div class="card-title">세대 사용정보확인</div>
+            <button id="goToApplications">1. 신청서 이동버튼</button>
+        </div>
+    </div>
+
+    <!-- Recycling card -->
+    <div class="kiosk-card" id="recycleCard">
+        <div class="card-content">
+            <div class="card-icon recycle"></div>
+            <div class="card-title">대형 폐기물</div>
+            <button id="goToApply">2. 신청서 이동버튼</button>
+        </div>
+    </div>
+</div>
+
+<div class="footer-bar">
+    Wed 03rd March 2:19 PM
+</div>
+<script src="/js/script.js"></script>
+
+<!-- 이벤트 카드를 눌렀을 때 생기는 script-->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 세대 사용정보확인 카드에 클릭 이벤트 추가
+        document.getElementById('applicationCard').addEventListener('click', function() {
+            alert('신청서 이동');
+            window.location.href = '/waste/applications';
+        });
+
+        // 대형 폐기물 카드에 클릭 이벤트 추가
+        document.getElementById('recycleCard').addEventListener('click', function() {
+            alert('재활용 이동');
+            window.location.href = '/waste/apply';
+        });
+    });
+</script>
+</div>
+</body>
+</html>

@@ -3,32 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>키오스크 서비스</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <title>서비스 선택 화면</title>
+    <link rel="stylesheet" href="/css/MainUse.css">
 </head>
+<link rel="icon" href="data:;base64,iVBORw0KGgo=">
+
 <body>
-
-<div class="kiosk-container">
-    <!-- Home card -->
-    <div class="kiosk-card" id="homeCard">
-        <div class="card-content">
-            <div class="card-icon home"></div>
-            <div class="card-title">세대 사용정보확인</div>
+<div class="service-container">
+    <header>
+        <h1>키오스크 서비스 화면</h1>
+        <div class="time">Wed 03rd March 2:19 PM</div>
+    </header>
+    <section class="service-selection">
+        <div class="service-option" id="service-1">
+            <img src="/images/apartment.jpg" alt="Service 1"><br><br>
+            <button type="button" onclick="location.href='/waste'">1. 대형 폐기물</button>
         </div>
-    </div>
 
-    <!-- Recycling card -->
-    <div class="kiosk-card" id="recycleCard">
-        <div class="card-content">
-            <div class="card-icon recycle"></div>
-            <div class="card-title">대형 폐기물</div>
-        </div>
-    </div>
+        <button type="button" class="logout-button" id="logoutButton">로그아웃</button>
+        <!-- 다른 서비스 옵션들을 추가합니다 -->
+        <!-- 예를 들어, id="service-2", id="service-3" ... -->
+    </section>
 </div>
-
-<div class="footer-bar">
-    Wed 03rd March 2:19 PM
-</div>
-<script src="/js/script.js"></script>
+<footer>
+    <!-- 푸터 내용을 추가합니다 -->
+</footer>
+<script src="/temp/logout.js"></script>
+<script src="/js/autoLogout.js"></script>
 </body>
 </html>

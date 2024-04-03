@@ -1,15 +1,61 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-    <!-- jQuery 라이브러리 추가 -->
+    <title>폐기물 선택 화면</title>
+    <link rel="stylesheet" href="/css/style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <!-- AJAX 전역 설정 파일 추가 -->
-    <script src="/js/ajax.js"></script>
-
 </head>
 <body>
 
+<!--위의 카테고리(탭) 부분-->
+<div class="tabs">
+    <button class="tab-button" data-tab-index="1">탭1</button>
+    <button class="tab-button" data-tab-index="2">탭2</button>
+    <button class="tab-button" data-tab-index="3">탭3</button>
+    <button class="tab-button" data-tab-index="4">탭4</button>
+</div>
+
+<!--탭 내용 부분 -->
+<div id="contentArea"></div>
+
+<!-- 여기가 list로 뽑아내는 부분-->
+<div id="wasteList"> </div>
+
+<!-- 선택한 아이템 상세 정보와 옵션 선택을 위한 모달 -->
+<div id="modal-backdrop" onclick="closeSelectionContainer()"></div>
+<div id="waste-selection-container"></div>
+
+<!-- 사용자가 폐기물을 선택했을 때 나타날 폼 -->
+<!-- 서버에서 가져온 폐기물 종류를 여기에 표시 -->
+<div id="waste-detail-form" style="display: none;">
+    <form id="wasteForm">
+        <div class="input-group">
+            <label for="quantity">수량:</label>
+            <input type="number" id="quantity" name="quantity" min="1" required>
+        </div>
+
+        <div class="input-group">
+            <label for="date">날짜:</label>
+            <input type="date" id="date" name="date" required>
+            <span class="warning-icon" id="dateWarning" style="display:none;">[!]</span>
+        </div>
+
+        <!-- 필요한 경우 추가 정보를 입력받는 필드를 여기에 추가 -->
+
+        <button type="button" id="add-to-cart">담기</button>
+        <button type="button" id="cancel">취소</button>
+    </form>
+</div>
+
+<div id="cart-items">
+    <h3>장바구니</h3>
+    <ul id="cart-list">
+        <!-- 여기에 동적으로 폐기물 항목들이 추가됩니다 -->
+    </ul>
+    <div>총 결제 액수: <span id="total-price">0</span></div>
+</div>
+
+<script src="/js/wasteSelection.js"></script>
 </body>
 </html>

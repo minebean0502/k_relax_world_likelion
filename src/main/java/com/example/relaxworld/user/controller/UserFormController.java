@@ -29,7 +29,21 @@ public class UserFormController {
 
     @GetMapping("/login")
     public String toLogin() {
-        return "/user/login";
+        return "/user/login2";
+    }
+
+    @GetMapping("/idpw/id/find")
+    public String toFindId(){
+        return "/user/idfind";
+    }
+    @GetMapping("/idpw/pw/find")
+    public String toFindPw() {
+        return "/user/pwfind";
+    }
+
+    @GetMapping("/modify")
+    public String toModify() {
+        return "/user/modify";
     }
 
     @GetMapping("/services")

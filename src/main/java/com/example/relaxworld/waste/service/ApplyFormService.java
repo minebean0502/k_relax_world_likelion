@@ -3,10 +3,7 @@ package com.example.relaxworld.waste.service;
 import com.example.relaxworld.AuthenticationFacade;
 import com.example.relaxworld.user.entity.User;
 import com.example.relaxworld.user.repository.UserRepository;
-import com.example.relaxworld.waste.dto.FinalizeApplicationDto;
-import com.example.relaxworld.waste.dto.FormDto;
-import com.example.relaxworld.waste.dto.WasteApplicationDto;
-import com.example.relaxworld.waste.dto.WasteItemDto;
+import com.example.relaxworld.waste.dto.*;
 import com.example.relaxworld.waste.entity.FormEntity;
 import com.example.relaxworld.waste.entity.WasteApplicationEntity;
 import com.example.relaxworld.waste.entity.WasteEntity;
@@ -16,6 +13,9 @@ import com.example.relaxworld.waste.repository.WasteRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.AccessDeniedException;
@@ -29,7 +29,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ApplyFormService {
-    private final UserRepository userRepository;
     private final FormRepository formRepository;
     private final WasteRepository wasteRepository;
     private final WasteApplicationRepository wasteApplicationRepository;
@@ -160,6 +159,28 @@ public class ApplyFormService {
         }
     }
 
+    public List<WasteDto> wasteItems() {
+        List<WasteEntity> wasteEntities = wasteRepository.findAll();
+        List<WasteDto> list = new ArrayList<>();
+        for (WasteEntity wasteEntity : wasteEntities) {
+            WasteDto wasteDto = WasteDto.fromEntity(wasteEntity);
+            list.add(wasteDto);
+        }
+        return list;
+    }
+
+    // 탭에 따른 WasteEntity 조회 (탭 1개당, 1~9개)
+    public List<WasteDto> getItemsByTab(int tabIndex) {
+        // 한 페이지당 9개의 아이템을 표시하는 로직 // 나중에는 카테고리에 따라 분류 할 예정 있음
+        int pageSize = 9;
+        Pageable pageable = PageRequest.of(tabIndex -1, pageSize);
+
+        Page<WasteEntity> page = wasteRepository.findAll(pageable);
+        List<WasteDto> wasteDto = page.stream()
+                .map(WasteDto::fromEntity)
+                .collect(Collectors.toList());
+        return wasteDto;
+    }
 
 
 
