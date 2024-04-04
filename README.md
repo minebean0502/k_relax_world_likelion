@@ -65,3 +65,49 @@ foo(꼬릿말/who) : {작성자}
    
 ### foo (꼬릿말)
 일반적으로 issue tracker ID를 작성하나, 우리팀은 누가 commit 한 내용인지 알기 위해 작성자 명을 적는다.
+
+--------------------------------------
+
+ImageUpload readme
+
+aws S3 내 사용자 생성 및 S3 스토리지 생성은 너무길어질까봐 생략합니다. 구글 보면 아주 잘돼있고 간단하더라구용.
+
+application.properties 에서
+    #AWS S3 imageUpload
+#access key
+cloud.aws.credentials.accessKey= ${accessKey} // aws IAM 사용자 accessKEY 입력
+
+#secret key
+cloud.aws.credentials.secretKey= ${secretKey} // aws IAM 사용자 sccessKEY 입력
+
+#bucketName
+cloud.aws.s3.bucketName=${bucketName}
+
+#server-region
+cloud.aws.region.static=ap-northeast-2
+
+#cloud formation
+cloud.aws.stack.auto=false
+
+S3Config Class 생성
+
+    @Configuration
+public class S3Config {
+    @Value("${cloud.aws.credentials.accessKey}")
+    private String accessKey;
+    @Value("${cloud.aws.credentials.secretKey}")
+    private String secretKey;
+    @Value("${cloud.aws.region.static}")
+    private String region;
+
+    @Bean
+    public AmazonS3Client amazonS3Client() {
+        BasicAWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
+
+        return (AmazonS3Client) AmazonS3ClientBuilder
+                .standard()
+                .withRegion(region)
+                .withCredentials(new AWSStaticCredentialsProvider(credentials))
+                .build();
+    }
+}
