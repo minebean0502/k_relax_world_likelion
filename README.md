@@ -158,9 +158,11 @@ S3Service Class 생성
     private String generateFileName(MultipartFile file) {
         return UUID.randomUUID().toString() + "-" + file.getOriginalFilename();
     }
-    }
+    
+  }
 
-        @PostMapping("image/modify")
+
+    @PostMapping("image/modify")
     public ResponseEntity<Object> imageModify(
             @RequestPart String userId,
             @RequestPart(required = false) MultipartFile image
