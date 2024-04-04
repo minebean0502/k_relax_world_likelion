@@ -112,3 +112,79 @@ S3Config Class 생성
                 .build();
     }
 }
+
+S3Service Class 생성
+
+
+    public class S3Service {
+
+    private final AmazonS3Client amazonS3;
+
+    @Value("${cloud.aws.s3.bucketName}")
+    private String bucketName;
+
+    private String dir = "/image";
+    private String defaultUrl = "https://ybbucket14";
+
+
+    public void deleteFile(String fileName) throws IOException {
+        try {
+            int startIndex = fileName.indexOf("image/");
+            String fileKey = fileName.substring(startIndex);
+            amazonS3.deleteObject(bucketName, fileKey);
+        } catch (SdkClientException e) {
+            throw new IOException("Error deleting file from S3", e);
+        }
+    }
+
+    public String uploadFile(MultipartFile file) throws IOException {
+
+        String bucketDir = bucketName + dir;
+        String dirUrl = defaultUrl + dir + "/";
+        String fileName = generateFileName(file);
+
+        amazonS3.putObject(bucketDir, fileName, file.getInputStream(), getObjectMetadata(file));
+        return dirUrl + fileName;
+
+    }
+
+    private ObjectMetadata getObjectMetadata(MultipartFile file) {
+        ObjectMetadata objectMetadata = new ObjectMetadata();
+        objectMetadata.setContentType(file.getContentType());
+        objectMetadata.setContentLength(file.getSize());
+        return objectMetadata;
+    }
+
+    private String generateFileName(MultipartFile file) {
+        return UUID.randomUUID().toString() + "-" + file.getOriginalFilename();
+    }
+    }
+
+        @PostMapping("image/modify")
+    public ResponseEntity<Object> imageModify(
+            @RequestPart String userId,
+            @RequestPart(required = false) MultipartFile image
+    ) throws IOException {
+        Map<String, String> map = new HashMap<>();
+        try{
+            Optional<User> user = userRepository.findByUserId(userId);
+
+            User userEntity = user.get();
+            //S3 스토리지 내에서 기존 이미지 삭제
+            s3UploadService.deleteFile(userEntity.getImage());
+            //Database 내 User Image에는 이미지의 링크가 들어간다.
+            userEntity.setImage(s3UploadService.uploadFile(image));
+            userRepository.save(userEntity);
+            
+            map.put("result", "사진 등록 성공");
+        } catch (Exception e){
+            map.put("error", e.toString());
+        }
+        return new ResponseEntity<>(map, HttpStatus.OK);
+    }
+
+메서드를 사용하면 
+![image](https://github.com/minebean0502/k_relax_world_likelion/assets/94902010/e49b8e3d-d0bb-4ac9-bd71-bf925c7db334)
+S3 내에 UUID생성후, 파일이름.확장자 이름으로 저장이 잘됩니다.
+
+
