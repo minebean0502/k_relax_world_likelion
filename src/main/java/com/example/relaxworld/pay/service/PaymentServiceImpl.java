@@ -2,7 +2,7 @@ package com.example.relaxworld.pay.service;
 
 import com.example.relaxworld.pay.dto.PaymentCallbackRequest;
 import com.example.relaxworld.pay.dto.RequestPayDto;
-import com.example.relaxworld.pay.entity.Order;
+import com.example.relaxworld.pay.entity.Form;
 import com.example.relaxworld.pay.entity.PaymentStatus;
 import com.example.relaxworld.pay.repository.OrderRepository;
 import com.example.relaxworld.pay.repository.PaymentRepository;
@@ -39,7 +39,7 @@ public class PaymentServiceImpl implements PaymentService {
     protected Iamport iamport = null;
     @Override
     public RequestPayDto findRequestDto(String orderUid) {
-        Order order = orderRepository.findOrderAndPaymentAndUseber(orderUid)
+        Form order = orderRepository.findOrderAndPaymentAndUseber(orderUid)
                 .orElseThrow(() -> new IllegalArgumentException("주문이 없습니다."));
         return RequestPayDto.builder()
                 .buyerName(order.getPayUser().getUsername())
@@ -56,7 +56,7 @@ public class PaymentServiceImpl implements PaymentService {
             // 결제 단건 조회(아임포트)
             IamportResponse<Payment> iamportResponse = iamportClient.paymentByImpUid(request.getPaymentUid());
             // 주문내역 조회
-            Order order = orderRepository.findOrderAndPayment(request.getOrderUid())
+            Form order = orderRepository.findOrderAndPayment(request.getOrderUid())
                     .orElseThrow(() -> new IllegalArgumentException("주문 내역이 없습니다."));
             // 결제 완료가 아니면
             if (!iamportResponse.getResponse().getStatus().equals("paid")) {

@@ -12,9 +12,14 @@
 <body>
 <div class="login-container">
     <header>
-        <h1>대행 폐기물 키오스크</h1>
-        <div class="time">Wed 03rd March 2:19 PM</div>
-    </header>
+        <div class="header-content">
+            <h1>로그인 화면</h1>
+            <div class="header-buttons">
+                <button onclick="location.href='/'" title="홈 화면 이동"><img src="/images/home-icon.png" alt="Home"/></button>
+<!--                <button type="button" id="logoutButton"><img src="/images/logout-icon.png" alt="Logout"></button>-->
+            </div>
+        </div>
+    </header><br>
 
     <section class="login-form">
         <form id="loginForm">
@@ -31,20 +36,18 @@
             </div>
             <div>
 
-                <button type="button" onclick="location.href='/home'">돌아가기</button>
-                <!--   제출 버튼     -->
-                <button type="submit">Submit</button>
+                <button type="submit" class="long-button">Submit</button>
+                <button type="button" onclick="location.href='/home'" class="long-button">돌아가기</button>
+
                 <!-- id, pw 이동 버튼 -->
                 <button type="button" onclick="location.href='/idpw/id/find'">아이디 찾기</button>
                 <button type="button" onclick="location.href='/idpw/pw/find'">비밀번호 찾기</button>
+                <button type="button" onclick="location.href='/oauth2/authorization/kakao'">카카오 로그인</button>
             </div>
             <h3>이 로그인 페이지는 현재 작동중인 페이지 입니다.</h3>
         </form>
     </section>
 </div>
-<footer>
-    <!-- 푸터 내용을 추가합니다 -->
-</footer>
 <script>
     $(document).ready(function () {
         $('#loginForm').submit(function (event) {
@@ -78,5 +81,6 @@
         });
     });
 </script>
+<script src=/temp/logout.js></script>
 </body>
 </html>

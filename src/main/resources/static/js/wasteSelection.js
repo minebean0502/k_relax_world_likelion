@@ -229,6 +229,46 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('modal-backdrop').style.display = 'none';
     }
 
+    document.getElementById('finalize-application').addEventListener('click', function() {
+        const todayDateUTC = new Date().toISOString().split('T')[0];
+
+        // 화면에 현재 날짜 표시
+        document.getElementById('display-application-date').textContent = todayDateUTC;
+
+        const formId = tempFormId; // 현재 신청할 폼 = tempFormId
+
+        // FinalizeApplicationDto 의 구조를 따름
+        const finalizeDto = {
+            formId: formId,
+            location: "Desired Location", // 나중에 NCP maps 연동하기
+            date: todayDateUTC
+        };
+
+        fetch('/v1/user/waste/apply/finalize', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('jwtToken')
+            },
+            body: JSON.stringify(finalizeDto)
+        })
+            .then(response => response.json())
+            .then(data => {
+                alert('신청이 완료되었습니다.');
+                // 그 뒤에 다시 /waste로 리디렉션?
+                window.location.href='/waste'
+            })
+            .catch(error => {
+                console.error('Error finalizing application:', error);
+                alert('신청 완료 중 오류가 발생했습니다.');
+            });
+    });
+    document.getElementById('cancel-application').addEventListener('click', function() {
+        // 취소한다면 /waste로 리디렉션
+        window.location.href = '/waste';
+    });
+
+
     // 기본 탭 로드
     // showItems(1);
     // 임시 폼 작성 시작

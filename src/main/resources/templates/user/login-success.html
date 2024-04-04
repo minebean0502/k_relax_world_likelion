@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>로그인 성공</title>
+</head>
+<body>
+로그인 성공. 잠시 후 서비스 페이지로 이동합니다.
+<script>
+    // URL에서 jwtToken과 kakaoAccessToken 추출
+    const urlParams = new URLSearchParams(window.location.search);
+    const jwtToken = urlParams.get('token'); // 기존에 사용하던 JWT 토큰
+    const kakaoAccessToken = urlParams.get('kakaoAccessToken'); // 추가로 저장할 카카오 accessToken
+    console.log(jwtToken);
+    console.log(kakaoAccessToken);
+
+    // 토큰들을 로컬 스토리지에 저장
+    if(jwtToken && kakaoAccessToken) {
+        localStorage.setItem('jwtToken', jwtToken);
+        localStorage.setItem('kakaoAccessToken', kakaoAccessToken); // 카카오 accessToken 저장
+        // /services 페이지로 2초 후 리다이렉션
+        setTimeout(function() {
+            window.location.href = '/services';
+        }, 2000);
+    } else {
+        console.error('필요한 토큰이 없습니다.');
+    }
+</script>
+</body>
+</html>

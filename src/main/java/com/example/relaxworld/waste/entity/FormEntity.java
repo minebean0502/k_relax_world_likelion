@@ -1,5 +1,6 @@
 package com.example.relaxworld.waste.entity;
 
+import com.example.relaxworld.pay.entity.Payment;
 import com.example.relaxworld.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -32,8 +33,8 @@ public class FormEntity {
     private String status;          // 결제 상태는?
     @Setter
     // @OneToOne
-    // @JoinColumn(name = "paymentId")
-    private Long paymentId;         // 어떤 결제 수단으로 결제 했는가?
+    // @JoinColumn(name = "payment_Id")
+    private Long PaymentId;         // 어떤 결제 수단으로 결제 했는가?
 
     @OneToMany(mappedBy = "form")
     private List<WasteApplicationEntity> wasteApplications = new ArrayList<>();

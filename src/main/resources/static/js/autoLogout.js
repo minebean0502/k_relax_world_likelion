@@ -4,11 +4,12 @@
 
     function resetTimer() {
         clearTimeout(autoLogoutTimer);
-        autoLogoutTimer = setTimeout(logoutUser, 15 * 60 * 1000); // 15분 설정
+        autoLogoutTimer = setTimeout(logoutUser, 1 * 60 * 1000); // 1분 설정
     }
 
     function logoutUser() {
         localStorage.removeItem('jwtToken'); // JWT 토큰 삭제
+        localStorage.removeItem('kakaoAccessToken') // 카카오 토큰도 삭제
         window.location.href = '/home'; // 홈 화면으로 자동 리다이렉션
     }
 

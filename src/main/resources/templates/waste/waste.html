@@ -3,52 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>키오스크 서비스</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <title>스티커 발급 서비스</title>
+    <link rel="stylesheet" href="/css/MainUse.css">
+    <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+
 </head>
 <body>
-<div id='main_wrap'>
-<div class="kiosk-container">
-    <!-- Home card -->
-    <div class="kiosk-card" id="applicationCard">
-        <div class="card-content">
-            <div class="card-icon home"></div>
-            <div class="card-title">세대 사용정보확인</div>
-            <button id="goToApplications">1. 신청서 이동버튼</button>
+<div class="login-container">
+    <header>
+        <div class="header-content">
+            <h1>스티커 발급 서비스</h1>
+            <div class="header-buttons">
+                <button onclick="location.href='/'" title="홈 화면 이동"><img src="/images/home-icon.png" alt="Home"/></button>
+                <button type="button" id="logoutButton"><img src="/images/logout-icon.png" alt="Logout"></button>
+            </div>
+        </div>
+    </header>
+    <br>
+
+    <div id='main_wrap'>
+        <div class="kiosk-container kiosk-container-waste">
+            <div class="kiosk-card kiosk-card-waste" id="applicationCard">
+                <div class="card-content card-content-waste">
+                    <div class="card-icon card-icon-waste home"></div>
+                    <div class="card-title">세대 사용정보</div>
+                    <button type="button" class="long-button" id="goToApplications">확인하기</button>
+                </div>
+            </div>
+
+            <div class="kiosk-card kiosk-card-waste" id="recycleCard">
+                <div class="card-content card-content-waste">
+                    <div class="card-icon card-icon-waste recycle"></div>
+                    <div class="card-title">스티커 발급</div>
+                    <button type="button" class="long-button" id="goToApply">신청하기</button>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Recycling card -->
-    <div class="kiosk-card" id="recycleCard">
-        <div class="card-content">
-            <div class="card-icon recycle"></div>
-            <div class="card-title">대형 폐기물</div>
-            <button id="goToApply">2. 신청서 이동버튼</button>
-        </div>
+    <div class="footer-bar">
+        Wed 03rd March 2:19 PM
     </div>
-</div>
+    <script src="/js/script.js"></script>
+    <script src="/js/autoLogout.js"></script>
+    <!-- 이벤트 카드를 눌렀을 때 생기는 script-->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // 세대 사용정보확인 카드에 클릭 이벤트 추가
+            document.getElementById('applicationCard').addEventListener('click', function () {
+                alert('신청서 이동');
+                window.location.href = '/waste/applications';
+            });
 
-<div class="footer-bar">
-    Wed 03rd March 2:19 PM
-</div>
-<script src="/js/script.js"></script>
-
-<!-- 이벤트 카드를 눌렀을 때 생기는 script-->
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // 세대 사용정보확인 카드에 클릭 이벤트 추가
-        document.getElementById('applicationCard').addEventListener('click', function() {
-            alert('신청서 이동');
-            window.location.href = '/waste/applications';
+            // 대형 폐기물 카드에 클릭 이벤트 추가
+            document.getElementById('recycleCard').addEventListener('click', function () {
+                alert('재활용 이동');
+                window.location.href = '/waste/apply';
+            });
         });
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        Kakao.init('7f4c34ed8e44f07b115d63e0f7a0d041');
 
-        // 대형 폐기물 카드에 클릭 이벤트 추가
-        document.getElementById('recycleCard').addEventListener('click', function() {
-            alert('재활용 이동');
-            window.location.href = '/waste/apply';
+        document.getElementById('logoutButton').addEventListener('click', function () {
+            const jwtToken = localStorage.getItem('jwtToken');
+            const kakaoAccessToken = localStorage.getItem('kakaoAccessToken');
+
+            // JWT 토큰을 사용하는 경우 로컬 스토리지에서 제거하고 리디렉션
+            if (jwtToken) {
+                localStorage.removeItem('jwtToken');
+            }
+
+            // Kakao 로그인을 사용하는 경우
+            if (kakaoAccessToken) {
+                console.log(kakaoAccessToken)
+                // 카카오 로그아웃 요청
+                $.ajax({
+                    type: "POST",
+                    url: "https://kapi.kakao.com/v1/user/logout",
+                    headers: {
+                        "Authorization": "Bearer " + kakaoAccessToken
+                    },
+                    success: function (response) {
+                        console.log('카카오 로그아웃 완료');
+                        // 로컬 스토리지에서 카카오 액세스 토큰 제거
+                        localStorage.removeItem('kakaoAccessToken');
+                        // 로그아웃 후 /login 페이지로 리다이렉션
+                        setTimeout(function () {
+                            window.location.href = '/login';
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('카카오 로그아웃 실패');
+                        alert('로그아웃에 실패했습니다.');
+                        // 실패 시에도 토큰 삭제 후 리다이렉션 처리할 수 있도록 선택 가능
+                        setTimeout(function () {
+                            localStorage.removeItem('kakaoAccessToken');
+                            window.location.href = '/login';
+                        });
+                    }
+                })
+                ;
+            } else if (!jwtToken) {
+                // JWT 토큰도, 카카오 액세스 토큰도 없는 경우
+                window.location.href = '/login';
+            }
         });
-    });
-</script>
+    </script>
 </div>
 </body>
 </html>

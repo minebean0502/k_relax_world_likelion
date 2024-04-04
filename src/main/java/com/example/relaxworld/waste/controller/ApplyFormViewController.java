@@ -40,10 +40,14 @@ public class ApplyFormViewController {
     }
     @GetMapping("/applications")
     public String toApplications() {
-        return "/waste/application/application-list";
+        return "/waste/application";
     }
-    @GetMapping("/applications/{id}")
-    public String toApplicationsId() {
-        return "/waste/application/application";
-    }
+//    @GetMapping("/applications")
+//    public String toApplications() {
+//        return "/waste/application/application";
+//    }
+//    @GetMapping("/applications/{id}")
+//    public String toApplicationsId() {
+//        return "/waste/application/application";
+//    }
 }

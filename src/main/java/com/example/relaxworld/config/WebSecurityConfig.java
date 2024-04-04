@@ -2,6 +2,8 @@ package com.example.relaxworld.config;
 
 import com.example.relaxworld.jwt.JwtTokenFilter;
 import com.example.relaxworld.jwt.JwtTokenUtils;
+import com.example.relaxworld.user.oauth.OAuth2SuccessHandler;
+import com.example.relaxworld.user.oauth.OAuth2UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +20,8 @@ import org.springframework.security.web.access.intercept.AuthorizationFilter;
 public class WebSecurityConfig {
     private final JwtTokenUtils jwtTokenUtils;
     private final UserDetailsManager manager;
+    private final OAuth2UserServiceImpl oAuth2UserService;
+    private final OAuth2SuccessHandler oAuth2SuccessHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(
@@ -82,6 +86,12 @@ public class WebSecurityConfig {
                         .permitAll()
                          */
                         .anyRequest().permitAll()
+                )
+                .oauth2Login(oauth2Login -> oauth2Login
+                        .loginPage("/v1/user/login")
+                        .successHandler(oAuth2SuccessHandler)
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .userService(oAuth2UserService))
                 )
 
                 .sessionManagement(session -> session

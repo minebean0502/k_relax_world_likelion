@@ -5,57 +5,127 @@
     <title>폐기물 선택 화면</title>
     <link rel="stylesheet" href="/css/style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+    <link rel="stylesheet" href="/css/MainUse.css">
+
+
 </head>
+<link rel="icon" href="data:;base64,iVBORw0KGgo=">
+
 <body>
+<div class="login-container">
+    <header>
+        <div class="header-content">
+            <h1>스티커 발급 화면</h1>
+            <div class="header-buttons">
+                <button onclick="location.href='/'" title="홈 화면 이동"><img src="/images/home-icon.png" alt="Home"/></button>
+                <button type="button" id="logoutButton"><img src="/images/logout-icon.png" alt="Logout"></button>
+            </div>
+        </div>
+    </header>
 
+    <div class="tabs">
+        <button class="tab-button" data-tab-index="1">탭1</button>
+        <button class="tab-button" data-tab-index="2">탭2</button>
+        <button class="tab-button" data-tab-index="3">탭3</button>
+        <button class="tab-button" data-tab-index="4">탭4</button>
+    </div>
+
+    <!--탭 내용 부분 -->
+    <div id="contentArea"></div>
+
+    <!-- 여기가 list로 뽑아내는 부분-->
+    <div id="wasteList"> </div>
+
+    <!-- 선택한 아이템 상세 정보와 옵션 선택을 위한 모달 -->
+    <div id="modal-backdrop" onclick="closeSelectionContainer()"></div>
+    <div id="waste-selection-container"></div>
+
+    <!-- 사용자가 폐기물을 선택했을 때 나타날 폼 -->
+    <!-- 서버에서 가져온 폐기물 종류를 여기에 표시 -->
+    <div id="waste-detail-form" style="display: none;">
+        <form id="wasteForm">
+            <div class="input-group">
+                <label for="quantity">수량:</label>
+                <input type="number" id="quantity" name="quantity" min="1" required>
+            </div>
+
+            <div class="input-group">
+                <label for="date">날짜:</label>
+                <input type="date" id="date" name="date" required>
+                <span class="warning-icon" id="dateWarning" style="display:none;">[!]</span>
+            </div>
+
+            <!-- 필요한 경우 추가 정보를 입력받는 필드를 여기에 추가 -->
+
+            <button type="button" id="add-to-cart">담기</button>
+            <button type="button" id="cancel">취소</button>
+        </form>
+    </div>
+
+    <div id="application-date">신청 날짜: <span id="display-application-date"></span></div>
+    <div id="cart-items">
+        <h3>장바구니</h3>
+        <ul id="cart-list">
+            <!-- 여기에 동적으로 폐기물 항목들이 추가됩니다 -->
+        </ul>
+        <div>총 결제 액수: <span id="total-price">0</span></div>
+        <button id="finalize-application">결제하기</button>
+        <button id="cancel-application">취소하기</button>
+</div>
 <!--위의 카테고리(탭) 부분-->
-<div class="tabs">
-    <button class="tab-button" data-tab-index="1">탭1</button>
-    <button class="tab-button" data-tab-index="2">탭2</button>
-    <button class="tab-button" data-tab-index="3">탭3</button>
-    <button class="tab-button" data-tab-index="4">탭4</button>
+
+
+    <script src="/js/wasteSelection.js"></script>
+    <script src="/js/autoLogout.js"></script>
+    <script>
+        Kakao.init('7f4c34ed8e44f07b115d63e0f7a0d041');
+
+        document.getElementById('logoutButton').addEventListener('click', function () {
+            const jwtToken = localStorage.getItem('jwtToken');
+            const kakaoAccessToken = localStorage.getItem('kakaoAccessToken');
+
+            // JWT 토큰을 사용하는 경우 로컬 스토리지에서 제거하고 리디렉션
+            if (jwtToken) {
+                localStorage.removeItem('jwtToken');
+            }
+
+            // Kakao 로그인을 사용하는 경우
+            if (kakaoAccessToken) {
+                console.log(kakaoAccessToken)
+                // 카카오 로그아웃 요청
+                $.ajax({
+                    type: "POST",
+                    url: "https://kapi.kakao.com/v1/user/logout",
+                    headers: {
+                        "Authorization": "Bearer " + kakaoAccessToken
+                    },
+                    success: function (response) {
+                        console.log('카카오 로그아웃 완료');
+                        // 로컬 스토리지에서 카카오 액세스 토큰 제거
+                        localStorage.removeItem('kakaoAccessToken');
+                        // 로그아웃 후 /login 페이지로 리다이렉션
+                        setTimeout(function () {
+                            window.location.href = '/login';
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('카카오 로그아웃 실패');
+                        alert('로그아웃에 실패했습니다.');
+                        // 실패 시에도 토큰 삭제 후 리다이렉션 처리할 수 있도록 선택 가능
+                        setTimeout(function () {
+                            localStorage.removeItem('kakaoAccessToken');
+                            window.location.href = '/login';
+                        });
+                    }
+                })
+                ;
+            } else if (!jwtToken) {
+                // JWT 토큰도, 카카오 액세스 토큰도 없는 경우
+                window.location.href = '/login';
+            }
+        });
+    </script>
 </div>
-
-<!--탭 내용 부분 -->
-<div id="contentArea"></div>
-
-<!-- 여기가 list로 뽑아내는 부분-->
-<div id="wasteList"> </div>
-
-<!-- 선택한 아이템 상세 정보와 옵션 선택을 위한 모달 -->
-<div id="modal-backdrop" onclick="closeSelectionContainer()"></div>
-<div id="waste-selection-container"></div>
-
-<!-- 사용자가 폐기물을 선택했을 때 나타날 폼 -->
-<!-- 서버에서 가져온 폐기물 종류를 여기에 표시 -->
-<div id="waste-detail-form" style="display: none;">
-    <form id="wasteForm">
-        <div class="input-group">
-            <label for="quantity">수량:</label>
-            <input type="number" id="quantity" name="quantity" min="1" required>
-        </div>
-
-        <div class="input-group">
-            <label for="date">날짜:</label>
-            <input type="date" id="date" name="date" required>
-            <span class="warning-icon" id="dateWarning" style="display:none;">[!]</span>
-        </div>
-
-        <!-- 필요한 경우 추가 정보를 입력받는 필드를 여기에 추가 -->
-
-        <button type="button" id="add-to-cart">담기</button>
-        <button type="button" id="cancel">취소</button>
-    </form>
-</div>
-
-<div id="cart-items">
-    <h3>장바구니</h3>
-    <ul id="cart-list">
-        <!-- 여기에 동적으로 폐기물 항목들이 추가됩니다 -->
-    </ul>
-    <div>총 결제 액수: <span id="total-price">0</span></div>
-</div>
-
-<script src="/js/wasteSelection.js"></script>
 </body>
 </html>

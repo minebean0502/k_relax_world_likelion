@@ -1,6 +1,6 @@
 package com.example.relaxworld.pay.controller;
 
-import com.example.relaxworld.pay.entity.Order;
+import com.example.relaxworld.pay.entity.Form;
 import com.example.relaxworld.pay.entity.PayUser;
 import com.example.relaxworld.pay.service.OrderService;
 import com.example.relaxworld.pay.service.PayUserService;
@@ -30,7 +30,7 @@ public class OrderController {
     @PostMapping("/order")
     public String autoOrder() {
         PayUser payUser = payUserService.autoRegister();
-        Order order = orderService.autoOrder(payUser);
+        Form order = orderService.autoOrder(payUser);
         String message = "주문 실패";
         if(order != null) {
             message = "주문 성공";

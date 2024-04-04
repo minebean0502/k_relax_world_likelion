@@ -98,7 +98,11 @@ public class ApplyFormController {
         return ResponseEntity.ok(wasteDto);
     }
 
-
+    @GetMapping("/show-applications")
+    public ResponseEntity<List<ApplicationListDto>> getShowedApplications() {
+        List<ApplicationListDto> applicationListDtos = applyFormService.readAllFormsToShow();
+        return ResponseEntity.ok(applicationListDtos);
+    }
     // ------------------------------------------------ //
     // 미완성
     // Form 하나 선택 후 삭제

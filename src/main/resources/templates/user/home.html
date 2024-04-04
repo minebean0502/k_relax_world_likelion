@@ -3,90 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!--    <link rel="stylesheet" href="/css/Home.css">-->
     <link rel="stylesheet" href="/css/MainUse.css">
     <title>키오스크 홈 화면</title>
-
+    <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
 </head>
 <link rel="icon" href="data:;base64,iVBORw0KGgo=">
 
 <body>
-<div class="service-container">
+<div class="login-container">
+
     <header>
-        <h1>키오스크 홈 화면입니다</h1>
-        <div class="time">Wed 03rd March 2:19 PM</div>
-    </header>
+        <div class="header-content">
+            <h1>홈 화면</h1>
+            <div class="header-buttons">
+                <button onclick="location.href='/'" title="홈 화면 이동"><img src="/images/home-icon.png" alt="Home"/></button>
+                <button type="button" id="logoutButton"><img src="/images/logout-icon.png" alt="Logout"></button>
+            </div>
+        </div>
+    </header><br>
+
+    <div class="service-container">
+        <header>
+            <h1>키오스크 홈 화면입니다</h1>
+            <div class="time">Wed 03rd March 2:19 PM</div>
+        </header>
+    </div><br>
 
     <section class="service-selection">
         <div class="service-option" id="service-1">
-            <img src="/images/apartment.jpg" alt="Service 1"><br><br>
-            <button type="button" onclick="location.href='/login'">로그인</button>
-            <button type="button" onclick="location.href='/register'">회원가입</button>
-            <button type="button" id="goToServices">서비스 버튼</button>
-            <!--  로그아웃 버튼  -->
-            <button type="button" class="logout-button" id="logoutButton">로그아웃</button>
+            <img src="/images/apartment.jpg" alt="Service 1" class="service-image">
+            <br><br><br><br>
+            <div class="button-group">
+                <button type="button" onclick="location.href='/login'" class="long-button">로그인</button>
+                <button type="button" onclick="location.href='/register'" class="long-button">회원가입</button>
+            </div>
         </div>
-        <!-- 다른 서비스 옵션들을 추가합니다 -->
-        <!-- 예를 들어, id="service-2", id="service-3" ... -->
     </section>
+
+
 </div>
-<!-- jQuery 라이브러리 추가 -->
+
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<!-- 로그아웃 스크립트 추가 -->
-<script src="/temp/logout.js"></script>
+<!-- 카카오 & jwt 로그아웃 관련 스크립트-->
 <script>
-    document.getElementById('goToServices').addEventListener('click', function(e) {
-        e.preventDefault();
+    Kakao.init('7f4c34ed8e44f07b115d63e0f7a0d041');
+
+    document.getElementById('logoutButton').addEventListener('click', function () {
         const jwtToken = localStorage.getItem('jwtToken');
+        const kakaoAccessToken = localStorage.getItem('kakaoAccessToken');
+
+        // JWT 토큰을 사용하는 경우 로컬 스토리지에서 제거하고 리디렉션
         if (jwtToken) {
-            // 사용자가 로그인되어 있음을 확인했다면, /services 페이지로 직접 이동합니다.
-            // 이동하기 전에 서버에 인증 요청을 보내는 AJAX 요청은 필요하지 않습니다.
-            // 대신, 서버는 /services 요청을 받을 때 사용자의 인증 상태를 검증해야 합니다.
-            window.location.href = '/services';
-        } else {
-            alert('로그인이 필요합니다.');
+            localStorage.removeItem('jwtToken');
+        }
+
+        // Kakao 로그인을 사용하는 경우
+        if (kakaoAccessToken) {
+            console.log(kakaoAccessToken)
+            // 카카오 로그아웃 요청
+            $.ajax({
+                type: "POST",
+                url: "https://kapi.kakao.com/v1/user/logout",
+                headers: {
+                    "Authorization": "Bearer " + kakaoAccessToken
+                },
+                success: function (response) {
+                    console.log('카카오 로그아웃 완료');
+                    // 로컬 스토리지에서 카카오 액세스 토큰 제거
+                    localStorage.removeItem('kakaoAccessToken');
+                    // 로그아웃 후 /login 페이지로 리다이렉션
+                    setTimeout(function () {
+                        window.location.href = '/login';
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.error('카카오 로그아웃 실패');
+                    alert('로그아웃에 실패했습니다.');
+                    // 실패 시에도 토큰 삭제 후 리다이렉션 처리할 수 있도록 선택 가능
+                    setTimeout(function () {
+                        localStorage.removeItem('kakaoAccessToken');
+                        window.location.href = '/login';
+                    });
+                }
+            })
+            ;
+        } else if (!jwtToken) {
+            // JWT 토큰도, 카카오 액세스 토큰도 없는 경우
             window.location.href = '/login';
         }
     });
 </script>
-<script>
-    $(document).ready(function() {
-        // 서비스 페이지로 이동하려는 버튼 또는 링크에 대한 클릭 이벤트 핸들러
-        $("#goToServices").on("click", function(e) {
-            e.preventDefault(); // 기본 이벤트를 방지합니다.
-
-            const jwtToken = localStorage.getItem('jwtToken'); // 로컬 스토리지에서 JWT 토큰 가져오기
-
-            if (jwtToken) {
-                // AJAX 요청을 사용하여 서버에 인증 정보를 포함하여 /services 경로로 요청을 보냅니다.
-                $.ajax({
-                    url: '/services', // 요청을 보낼 경로
-                    type: 'GET', // HTTP 요청 메서드
-                    contentType: "application/json", // 서버가 JSON 형태의 데이터를 받기를 기대
-                    beforeSend: function(xhr) {
-                        xhr.setRequestHeader("Authorization", "Bearer " + jwtToken);
-                    },
-                    success: function(response) {
-                        // 요청이 성공하면, 서버로부터 받은 응답(예: HTML 페이지 또는 데이터)을 처리합니다.
-                        // 예: document.location.href = '/services'; 페이지 이동
-                        // 또는 페이지 내용을 동적으로 업데이트할 수 있습니다.
-                        console.log(response);
-                        console.log(jwtToken);
-                        // 요청이 성공하면, /services 페이지로 리다이렉트합니다.
-                        window.location.href = '/services';
-                    },
-                    error: function(xhr, status, error) {
-                        // 인증 실패 또는 기타 오류 처리
-                        console.error("Error: " + error);
-                        // 필요에 따라 사용자를 로그인 페이지로 리다이렉트할 수 있습니다.
-                    }
-                });
-            } else {
-                // JWT 토큰이 없는 경우, 예를 들어 로그인 페이지로 이동시킬 수 있습니다.
-                console.log("JWT 토큰이 없습니다.");
-            }
-        });
-    });
-</script>
 </body>
 </html>
+
+<!--<script>-->
+<!--    $(document).ready(function() {-->
+<!--        // 서비스 페이지로 이동하려는 버튼 또는 링크에 대한 클릭 이벤트 핸들러-->
+<!--        $("#goToServices").on("click", function(e) {-->
+<!--            e.preventDefault(); // 기본 이벤트를 방지합니다.-->
+
+<!--            const jwtToken = localStorage.getItem('jwtToken'); // 로컬 스토리지에서 JWT 토큰 가져오기-->
+
+<!--            if (jwtToken) {-->
+<!--                // AJAX 요청을 사용하여 서버에 인증 정보를 포함하여 /services 경로로 요청을 보냅니다.-->
+<!--                $.ajax({-->
+<!--                    url: '/services', // 요청을 보낼 경로-->
+<!--                    type: 'GET', // HTTP 요청 메서드-->
+<!--                    contentType: "application/json", // 서버가 JSON 형태의 데이터를 받기를 기대-->
+<!--                    beforeSend: function(xhr) {-->
+<!--                        xhr.setRequestHeader("Authorization", "Bearer " + jwtToken);-->
+<!--                    },-->
+<!--                    success: function(response) {-->
+<!--                        // 요청이 성공하면, 서버로부터 받은 응답(예: HTML 페이지 또는 데이터)을 처리합니다.-->
+<!--                        // 예: document.location.href = '/services'; 페이지 이동-->
+<!--                        // 또는 페이지 내용을 동적으로 업데이트할 수 있습니다.-->
+<!--                        console.log(response);-->
+<!--                        console.log(jwtToken);-->
+<!--                        // 요청이 성공하면, /services 페이지로 리다이렉트합니다.-->
+<!--                        window.location.href = '/services';-->
+<!--                    },-->
+<!--                    error: function(xhr, status, error) {-->
+<!--                        // 인증 실패 또는 기타 오류 처리-->
+<!--                        console.error("Error: " + error);-->
+<!--                        // 필요에 따라 사용자를 로그인 페이지로 리다이렉트할 수 있습니다.-->
+<!--                    }-->
+<!--                });-->
+<!--            } else {-->
+<!--                // JWT 토큰이 없는 경우, 예를 들어 로그인 페이지로 이동시킬 수 있습니다.-->
+<!--                console.log("JWT 토큰이 없습니다.");-->
+<!--            }-->
+<!--        });-->
+<!--    });-->
+<!--</script>-->

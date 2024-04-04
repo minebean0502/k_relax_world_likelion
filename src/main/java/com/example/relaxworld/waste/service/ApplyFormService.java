@@ -2,7 +2,6 @@ package com.example.relaxworld.waste.service;
 
 import com.example.relaxworld.AuthenticationFacade;
 import com.example.relaxworld.user.entity.User;
-import com.example.relaxworld.user.repository.UserRepository;
 import com.example.relaxworld.waste.dto.*;
 import com.example.relaxworld.waste.entity.FormEntity;
 import com.example.relaxworld.waste.entity.WasteApplicationEntity;
@@ -19,7 +18,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.AccessDeniedException;
-import java.rmi.AccessException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -125,6 +123,43 @@ public class ApplyFormService {
                 .collect(Collectors.toList());
 
         return list;
+    }
+
+    public List<ApplicationListDto> readAllFormsToShow() {
+        User currentUser = facade.extractUser();
+        // 반드시 있다고 가정해서 orELseThrow 안씀
+
+        // 1. 유저의 id로 검색할 form의 정보?들
+        List<FormEntity> forms = formRepository.findAllByUserId(currentUser.getId());
+        // 새로 전달할 리스트
+        List<ApplicationListDto> applicationListDtos = new ArrayList<>();
+
+        // 각 FormEntity에 대해 ApplicationDto를 생성
+        for (FormEntity form : forms) {
+            // FormEntity의 ID로 WasteApplicationEntity 리스트를 조회
+            List<WasteApplicationEntity> wasteApplications = wasteApplicationRepository.findAllByFormId(form.getId());
+
+            String itemDescriptions = wasteApplications.stream()
+                    .map(wasteApplication -> wasteApplication.getWaste().getDescription())
+                    .collect(Collectors.joining(", ")); // 품목들을 쉼표로 구분된 문자열로 결합
+
+            int totalQuantity = wasteApplications.stream()
+                    .mapToInt(WasteApplicationEntity::getQuantity)
+                    .sum();
+
+            // ApplicationListEntity를 DTO로 변환 (필요한 정보만 사용)
+            ApplicationListDto applicationListDto = ApplicationListDto.builder()
+                    .applyDate(form.getDate()) // 신청 날짜
+                    .itemDescriptions(itemDescriptions) // 신청한 품목 설명
+                    .quantity(totalQuantity) // 총 수량
+                    .totalPrice(form.getTotalPrice()) // 총 금액
+                    .dueDate(form.getDate()) // 버릴 날짜
+                    .location(form.getLocation()) // 버릴 위치
+                    .payment(form.getStatus()) // 결제 상태 (혹은 결제 수단, 필드 확인 필요)
+                    .build();
+            applicationListDtos.add(applicationListDto);
+        }
+        return applicationListDtos;
     }
 
     // 리스트 하나만 확인

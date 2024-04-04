@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Table(name = "orders")
 @NoArgsConstructor
-public class Order {
+public class Form {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,7 +26,7 @@ public class Order {
     private Payment payment;
 
     @Builder
-    public Order(Long price, String itemName, String location, String orderUid, PayUser payUser, Payment payment) {
+    public Form(Long price, String itemName, String location, String orderUid, PayUser payUser, Payment payment) {
         this.price = price;
         this.itemName = itemName;
         this.location=location;
