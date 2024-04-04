@@ -225,10 +225,10 @@ button[type="button"] {
     margin-bottom: 8px;
 }
 .card-icon.home {
-    background-image: url('/static/images/home.png');
+    background-image: url('/images/home.png');
 }
 .card-icon.recycle {
-    background-image: url('/static/images/trash.png');
+    background-image: url('/images/trash.png');
 }
 
 .kiosk-container-waste {
